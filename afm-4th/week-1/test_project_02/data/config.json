@@ -1,0 +1,7 @@
+{
+  "name": "test_project_02",
+  "version": "0.1.0",
+  "debug": true,
+  "logLevel": "info",
+  "outputDir": "logs"
+}

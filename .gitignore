@@ -1,0 +1,36 @@
+# ── OS 생성 파일 ─────────────────────────────
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# ── 편집기 / IDE ─────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── Python ──────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ── Node ────────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ── 임시 / 백업 파일 ─────────────────────────
+*.tmp
+*.temp
+*.bak
+~$*
+
+# ── 로컬 설정 / 비밀값 ───────────────────────
+.claude/settings.local.json
+.env
+.env.local

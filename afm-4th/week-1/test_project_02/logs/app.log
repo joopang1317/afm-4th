@@ -1,0 +1,4 @@
+2026-08-22 15:10:01 INFO  app started
+2026-08-22 15:10:02 INFO  config loaded from config.json
+2026-08-22 15:10:05 WARN  cache miss for key=user:1
+2026-08-22 15:10:09 INFO  app finished
