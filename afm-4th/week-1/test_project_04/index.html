@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>간장 덮밥 레시피</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+</head>
+<body class="bg-stone-50">
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+// ========================================
+// 📦 Data
+// ========================================
+const INGREDIENTS = [
+  { name: '소고기 불고기감', amount: 150, unit: 'g' },
+  { name: '양파', amount: 0.5, unit: '개' },
+  { name: '대파', amount: 0.5, unit: '대' },
+  { name: '달걀', amount: 1, unit: '개' },
+  { name: '따뜻한 밥', amount: 1, unit: '공기' },
+  { name: '진간장', amount: 2, unit: '큰술' },
+  { name: '맛술', amount: 1, unit: '큰술' },
+  { name: '설탕', amount: 0.5, unit: '큰술' },
+  { name: '다진 마늘', amount: 0.5, unit: '큰술' },
+  { name: '물', amount: 50, unit: 'mL' },
+];
+
+const STEPS = [
+  '간장, 맛술, 설탕, 다진 마늘, 물을 섞어 소스를 만든다.',
+  '양파는 채 썰고 대파는 어슷 썬다.',
+  '팬에 기름을 두르고 센 불에서 소고기를 2분간 볶는다.',
+  '양파를 넣고 투명해질 때까지 2분 더 볶는다.',
+  '소스를 붓고 중불에서 5분간 자작하게 졸인다.',
+  '대파를 넣고 30초 뒤적인 뒤 불을 끈다.',
+  '밥 위에 얹고 반숙 달걀프라이를 올린다.',
+];
+
+// ========================================
+// 🎨 Design System
+// ========================================
+function Button({ onClick, children, className = '' }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Card({ title, children }) {
+  return (
+    <section className="bg-white rounded-xl shadow p-5 mb-4">
+      <h2 className="text-lg font-bold mb-3 text-stone-800">{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+// ========================================
+// 📄 Page
+// ========================================
+function RecipePage() {
+  const [servings, setServings] = useState(2);
+
+  const format = (amount, unit) => {
+    const total = (amount / 2) * servings;
+    const rounded = Math.round(total * 100) / 100;
+    return `${rounded}${unit}`;
+  };
+
+  return (
+    <main className="max-w-2xl mx-auto p-5">
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold text-stone-900">🍚 간장 소고기 덮밥</h1>
+        <p className="text-stone-500 mt-1">한 그릇으로 끝내는 20분 저녁</p>
+      </header>
+
+      <Card title="재료">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-sm text-stone-600">인분</span>
+          <Button onClick={() => setServings((s) => Math.max(1, s - 1))}>−</Button>
+          <span className="w-8 text-center font-bold">{servings}</span>
+          <Button onClick={() => setServings((s) => Math.min(8, s + 1))}>+</Button>
+        </div>
+        <ul className="divide-y divide-stone-100">
+          {INGREDIENTS.map((i) => (
+            <li key={i.name} className="flex justify-between py-2 text-stone-700">
+              <span>{i.name}</span>
+              <span className="font-medium">{format(i.amount, i.unit)}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+
+      <Card title="만드는 방법">
+        <ol className="list-decimal list-inside space-y-2 text-stone-700">
+          {STEPS.map((s, idx) => (
+            <li key={idx}>{s}</li>
+          ))}
+        </ol>
+      </Card>
+
+      <footer className="text-center text-sm text-stone-400 py-4">조리 시간 약 20분 · 2인분 기준</footer>
+    </main>
+  );
+}
+
+// ========================================
+// 🚀 Render
+// ========================================
+ReactDOM.createRoot(document.getElementById('root')).render(<RecipePage />);
+</script>
+</body>
+</html>

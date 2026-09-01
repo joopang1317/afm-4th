@@ -34,3 +34,8 @@ npm-debug.log*
 .claude/settings.local.json
 .env
 .env.local
+
+# ── 도구 산출물 / 외부 다운로드 ──────────────
+.playwright-mcp/
+skills-main/
+skills-main.zip
