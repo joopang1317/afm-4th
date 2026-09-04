@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>요약 노트 · 하버툴킷</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <!-- ⚠️ 모든 CDN 버전 고정. Babel 은 반드시 7.x (8.x 는 인라인 text/babel 미지원) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // ========================================
+    // 📊 요약 데이터
+    // ========================================
+    const SUMMARY = [
+      '미국에서 시작된 AI 콘텐츠를 일본 계정 포맷으로 70% 이상 벤치마킹해 한국 정서로 바꾸는 것이 핵심 전략이다.',
+      'AI 툴로 정보성 콘텐츠를 계속 만들어 팔로워 5만을 넘기면 브랜드에서 광고 DM이 먼저 들어온다.',
+      '프로페셔널 계정으로 전환해 메타 보너스까지 받으면 계정 하나로 광고 수익과 조회수 수익이 동시에 생긴다.',
+    ];
+
+    const POINTS = [
+      '일본 벤치마킹 70% 룰 — 미국 감성 그대로는 도달이 안 나온다. 정서가 가까운 일본 콘텐츠를 한국식으로 치환한다.',
+      '주제 선정 4조건 — 고갈되지 않을 것, AI로 쉽게 만들 것, 팔로우할 가치가 있을 것, 너무 AI스럽지 않을 것.',
+      '팔로워 5만이 분기점 — 광고 문의가 늘어난다. 제안서를 미리 만들어두고 보내기만 하면 응대 끝.',
+      '프로페셔널 계정은 필수 — 일반 계정은 수익화 기능 자체가 없다.',
+      '메타 보너스 자격 6가지 — 만 18세 이상, 한국 거주·납세, 프로페셔널 계정, 팔로워 1,000명 이상, 3개월 연속 월 100만 조회, 정책 준수.',
+    ];
+
+    const GLOSSARY = [
+      ['도달(Reach)', '게시물을 한 번이라도 본 고유 계정 수.'],
+      ['벤치마킹', '검증된 콘텐츠의 형식을 참고해 다시 만드는 것.'],
+      ['프로페셔널 계정', '크리에이터·비즈니스용 계정 유형. 수익화 기능이 열린다.'],
+      ['인스타그램 보너스', '메타가 조회수에 따라 직접 지급하는 수익. 유튜브 애드센스와 같은 개념.'],
+      ['인사이트', '인스타그램이 제공하는 도달·조회수·팔로우 증가 통계.'],
+      ['건기식', '건강기능식품. 건강 계정에 광고를 자주 제안하는 업종.'],
+    ];
+
+    // ========================================
+    // 🚀 App
+    // ========================================
+    function Block({ title, children }) {
+      return (
+        <section className="mt-8">
+          <h2 className="text-sm font-bold text-indigo-600">{title}</h2>
+          <div className="mt-2 bg-white rounded-xl shadow-sm p-5">{children}</div>
+        </section>
+      );
+    }
+
+    function App() {
+      return (
+        <main className="max-w-2xl mx-auto px-5 py-10">
+          <p className="text-xs font-bold tracking-[0.2em] text-indigo-600">하버툴킷</p>
+          <h1 className="mt-1 text-2xl font-bold">요약 노트</h1>
+          <p className="mt-1 text-sm text-slate-500">인스타그램 AI 수익화의 정석 (무료 전자책, 29쪽)</p>
+
+          <Block title="3줄 요약">
+            <ol className="list-decimal pl-5 space-y-2 text-[15px] leading-relaxed">
+              {SUMMARY.map((s, i) => <li key={i}>{s}</li>)}
+            </ol>
+          </Block>
+
+          <Block title="꼭 알아야 할 핵심 5가지">
+            <ol className="list-decimal pl-5 space-y-2.5 text-[15px] leading-relaxed">
+              {POINTS.map((p, i) => <li key={i}>{p}</li>)}
+            </ol>
+          </Block>
+
+          <Block title="어려운 용어 풀이">
+            <dl className="space-y-2.5">
+              {GLOSSARY.map(([term, desc]) => (
+                <div key={term} className="text-sm">
+                  <dt className="font-semibold inline">{term}</dt>
+                  <dd className="inline text-slate-600"> — {desc}</dd>
+                </div>
+              ))}
+            </dl>
+          </Block>
+
+          <Block title="내가 바로 할 수 있는 다음 행동">
+            <p className="font-bold">인스타그램을 프로페셔널 계정으로 전환하기</p>
+            <p className="mt-1 text-sm text-slate-600">
+              프로필 → ≡ 메뉴 → 내 인사이트 및 도구 → 계정 유형 및 도구 → 프로페셔널 계정으로 전환.
+              무료이고 5분이면 끝납니다.
+            </p>
+          </Block>
+
+          <p className="mt-8 text-xs text-slate-400 leading-relaxed">
+            ※ 유료 강의로 이어지는 무료 자료이며, 수치는 저자 본인 계정의 사례입니다. 참고용으로만 보세요.
+          </p>
+        </main>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

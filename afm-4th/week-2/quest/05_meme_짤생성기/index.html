@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>짤 생성기 · 하버툴킷</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <!-- ⚠️ 모든 CDN 버전 고정. Babel 은 반드시 7.x (8.x 는 인라인 text/babel 미지원) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect } = React;
+
+    // ========================================
+    // 🎨 Canvas 그리기
+    // ========================================
+    function drawMeme(canvas, img, topText, bottomText) {
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      ctx.drawImage(img, 0, 0);
+
+      // 이미지 크기에 비례한 글자 크기
+      const size = Math.round(canvas.width / 10);
+      ctx.font = `bold ${size}px "Arial Black", Impact, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = Math.max(2, size / 12);
+      ctx.lineJoin = 'round';
+
+      const x = canvas.width / 2;
+
+      if (topText) {
+        ctx.textBaseline = 'top';
+        const y = size * 0.3;
+        ctx.strokeText(topText, x, y);
+        ctx.fillText(topText, x, y);
+      }
+      if (bottomText) {
+        ctx.textBaseline = 'bottom';
+        const y = canvas.height - size * 0.3;
+        ctx.strokeText(bottomText, x, y);
+        ctx.fillText(bottomText, x, y);
+      }
+    }
+
+    // ========================================
+    // 🚀 App
+    // ========================================
+    function App() {
+      const [imgSrc, setImgSrc] = useState(null);
+      const [top, setTop] = useState('');
+      const [bottom, setBottom] = useState('');
+      const canvasRef = useRef(null);
+      const imgRef = useRef(null);
+
+      // 이미지 · 텍스트가 바뀔 때마다 다시 그린다
+      useEffect(() => {
+        if (!imgSrc) return;
+        const img = new Image();
+        img.onload = () => {
+          imgRef.current = img;
+          drawMeme(canvasRef.current, img, top, bottom);
+        };
+        img.src = imgSrc;
+      }, [imgSrc]);
+
+      useEffect(() => {
+        if (imgRef.current && canvasRef.current) {
+          drawMeme(canvasRef.current, imgRef.current, top, bottom);
+        }
+      }, [top, bottom]);
+
+      const pickFile = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => setImgSrc(ev.target.result);
+        reader.readAsDataURL(file);
+      };
+
+      const download = () => {
+        const a = document.createElement('a');
+        a.download = 'meme.png';
+        a.href = canvasRef.current.toDataURL('image/png');
+        a.click();
+      };
+
+      return (
+        <main className="max-w-lg mx-auto px-5 py-10">
+          <p className="text-xs font-bold tracking-[0.2em] text-indigo-600">하버툴킷</p>
+          <h1 className="mt-1 text-2xl font-bold">짤 생성기</h1>
+          <p className="mt-1 text-sm text-slate-500">이미지에 텍스트를 얹어 PNG로 저장합니다.</p>
+
+          <div className="mt-7 bg-white rounded-xl shadow-sm p-5 space-y-4">
+            <div>
+              <label htmlFor="file" className="block text-sm font-semibold">이미지</label>
+              <input
+                id="file" type="file" accept="image/*" onChange={pickFile}
+                className="mt-1.5 w-full text-sm file:mr-3 file:rounded-lg file:border-0
+                           file:bg-indigo-600 file:px-4 file:py-2 file:text-white file:font-semibold
+                           file:cursor-pointer"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="top" className="block text-sm font-semibold">위 텍스트</label>
+              <input
+                id="top" value={top} onChange={(e) => setTop(e.target.value)}
+                placeholder="상단에 넣을 문구"
+                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2
+                           focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="bottom" className="block text-sm font-semibold">아래 텍스트</label>
+              <input
+                id="bottom" value={bottom} onChange={(e) => setBottom(e.target.value)}
+                placeholder="하단에 넣을 문구"
+                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2
+                           focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+
+          <div className="mt-6">
+            {imgSrc ? (
+              <>
+                <canvas ref={canvasRef} className="w-full rounded-xl shadow-sm bg-white" />
+                <button
+                  onClick={download}
+                  className="mt-4 w-full py-3 rounded-xl bg-indigo-600 text-white font-bold
+                             hover:bg-indigo-700"
+                >
+                  PNG로 저장
+                </button>
+              </>
+            ) : (
+              <div className="rounded-xl border-2 border-dashed border-slate-300 py-16 text-center
+                              text-sm text-slate-400">
+                이미지를 선택하면 여기에 미리보기가 나옵니다.
+              </div>
+            )}
+          </div>
+
+          <p className="mt-8 text-xs text-slate-400">하버스쿨 AFM 4기 · week-2 quest</p>
+        </main>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

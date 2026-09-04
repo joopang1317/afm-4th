@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>종합소득세 계산기 · 하버툴킷</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <!-- ⚠️ 모든 CDN 버전 고정. Babel 은 반드시 7.x (8.x 는 인라인 text/babel 미지원) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const won = (n) => Math.round(n).toLocaleString('ko-KR') + '원';
+    const 만 = 10000;
+    const 억 = 100000000;
+
+    // ========================================
+    // 📊 종합소득세 세율표 (2023년 귀속분 이후)
+    // ========================================
+    const BRACKETS = [
+      { limit: 1400 * 만,  rate: 0.06, deduct: 0 },
+      { limit: 5000 * 만,  rate: 0.15, deduct: 126 * 만 },
+      { limit: 8800 * 만,  rate: 0.24, deduct: 576 * 만 },
+      { limit: 1.5 * 억,   rate: 0.35, deduct: 1544 * 만 },
+      { limit: 3 * 억,     rate: 0.38, deduct: 1994 * 만 },
+      { limit: 5 * 억,     rate: 0.40, deduct: 2594 * 만 },
+      { limit: 10 * 억,    rate: 0.42, deduct: 3594 * 만 },
+      { limit: Infinity,   rate: 0.45, deduct: 6594 * 만 },
+    ];
+
+    // ========================================
+    // 🧮 계산 — 배열 / 반복문 / 조건 분기
+    // ========================================
+    function calculate(incomeRaw, expenseRaw, deductionRaw) {
+      const income = Number(incomeRaw) || 0;      // 총수입금액
+      const expense = Number(expenseRaw) || 0;    // 필요경비
+      const deduction = Number(deductionRaw) || 0; // 소득공제
+
+      // 과세표준 = 수입 − 경비 − 공제 (음수면 0)
+      let base = income - expense - deduction;
+      if (base < 0) base = 0;
+
+      // 반복문으로 해당 구간을 찾는다 (누진공제 방식)
+      let bracket = BRACKETS[BRACKETS.length - 1];
+      for (const b of BRACKETS) {
+        if (base <= b.limit) { bracket = b; break; }
+      }
+
+      const income_tax = Math.max(0, base * bracket.rate - bracket.deduct); // 산출세액
+      const local_tax = income_tax * 0.1;                                    // 지방소득세 10%
+      const total = income_tax + local_tax;
+
+      // 실효세율 (조건 분기: 0원 나누기 방지)
+      const effective = income > 0 ? (total / income) * 100 : 0;
+
+      return { base, bracket, income_tax, local_tax, total, effective };
+    }
+
+    // ========================================
+    // 🧩 공통 레이아웃 (하버툴킷 전 페이지 공유)
+    // ========================================
+    function Shell({ title, subtitle, children }) {
+      return (
+        <div className="min-h-screen">
+          <header className="bg-white border-b border-slate-200">
+            <div className="max-w-lg mx-auto px-5 py-5">
+              <p className="text-xs font-bold tracking-[0.2em] text-indigo-600">하버툴킷</p>
+              <h1 className="mt-1 text-2xl font-bold">{title}</h1>
+              {subtitle && <p className="mt-1 text-sm text-slate-500">{subtitle}</p>}
+            </div>
+          </header>
+          <main className="max-w-lg mx-auto px-5 py-8">{children}</main>
+          <footer className="max-w-lg mx-auto px-5 pb-10 text-xs text-slate-400">
+            하버스쿨 AFM 4기 · week-2 quest
+          </footer>
+        </div>
+      );
+    }
+
+    function MoneyInput({ label, hint, value, onChange }) {
+      return (
+        <div className="mt-4 first:mt-0">
+          <label className="flex items-baseline justify-between text-sm font-semibold">
+            <span>{label}</span>
+            {hint && <span className="text-xs font-normal text-slate-400">{hint}</span>}
+          </label>
+          <div className="mt-1.5 relative">
+            <input
+              value={value}
+              onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+              inputMode="numeric"
+              placeholder="0"
+              aria-label={label}
+              className="w-full rounded-xl border border-slate-300 pl-4 pr-10 py-2.5 text-right text-lg
+                         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">원</span>
+          </div>
+          {value && (
+            <p className="mt-1 text-right text-xs text-slate-400">
+              {won(Number(value))}
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    // ========================================
+    // 🚀 App
+    // ========================================
+    function App() {
+      const [income, setIncome] = useState('');
+      const [expense, setExpense] = useState('');
+      const [deduction, setDeduction] = useState('1500000'); // 기본공제 150만원
+
+      const r = calculate(income, expense, deduction);
+
+      return (
+        <Shell title="종합소득세 계산기" subtitle="2023년 귀속분 이후 세율 기준">
+          <div className="bg-white rounded-2xl shadow-sm p-5">
+            <MoneyInput label="총수입금액" hint="1년 매출·수입 합계"
+                        value={income} onChange={setIncome} />
+            <MoneyInput label="필요경비" hint="사업 관련 지출"
+                        value={expense} onChange={setExpense} />
+            <MoneyInput label="소득공제" hint="기본공제 등"
+                        value={deduction} onChange={setDeduction} />
+          </div>
+
+          <div className="mt-6 bg-slate-800 text-white rounded-2xl p-5">
+            <div className="flex justify-between text-sm text-slate-300">
+              <span>과세표준</span>
+              <span>{won(r.base)}</span>
+            </div>
+            <div className="mt-1 flex justify-between text-sm text-slate-300">
+              <span>적용 세율</span>
+              <span>
+                {(r.bracket.rate * 100).toFixed(0)}%
+                {r.bracket.deduct > 0 && (
+                  <span className="ml-1 text-slate-400">
+                    (누진공제 {won(r.bracket.deduct)})
+                  </span>
+                )}
+              </span>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-slate-600 space-y-1.5 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-300">산출세액</span>
+                <span>{won(r.income_tax)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300">지방소득세 (10%)</span>
+                <span>{won(r.local_tax)}</span>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-slate-600">
+              <p className="text-sm text-slate-300">총 납부세액</p>
+              <p className="mt-1 text-4xl font-extrabold">{won(r.total)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                총수입 대비 실효세율 {r.effective.toFixed(1)}%
+              </p>
+            </div>
+          </div>
+
+          {/* 세율표 */}
+          <details className="mt-6 bg-white rounded-2xl shadow-sm p-5">
+            <summary className="text-sm font-bold cursor-pointer">세율표 보기</summary>
+            <table className="mt-4 w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-slate-500 border-b border-slate-200">
+                  <th className="pb-2">과세표준</th>
+                  <th className="pb-2 text-center">세율</th>
+                  <th className="pb-2 text-right">누진공제</th>
+                </tr>
+              </thead>
+              <tbody>
+                {BRACKETS.map((b, i) => {
+                  const from = i === 0 ? 0 : BRACKETS[i - 1].limit;
+                  const active = b === r.bracket;
+                  return (
+                    <tr key={i} className={`border-b border-slate-50 ${active ? 'bg-indigo-50 font-bold' : ''}`}>
+                      <td className="py-2">
+                        {(from / 만).toLocaleString('ko-KR')}만 초과
+                        {b.limit !== Infinity && ` ~ ${(b.limit / 만).toLocaleString('ko-KR')}만`}
+                      </td>
+                      <td className="py-2 text-center">{(b.rate * 100).toFixed(0)}%</td>
+                      <td className="py-2 text-right">
+                        {b.deduct === 0 ? '−' : (b.deduct / 만).toLocaleString('ko-KR') + '만'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </details>
+
+          <p className="mt-4 text-xs leading-relaxed text-slate-400">
+            ※ 세액공제·감면·기납부세액은 반영하지 않은 단순 계산입니다. 실제 신고 금액과 다를 수 있으니
+            참고용으로만 사용하세요.
+          </p>
+        </Shell>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

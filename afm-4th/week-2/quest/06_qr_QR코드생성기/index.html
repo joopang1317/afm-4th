@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR 코드 생성기 · 하버툴킷</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <!-- ⚠️ 모든 CDN 버전 고정. Babel 은 반드시 7.x (8.x 는 인라인 text/babel 미지원) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+  <!-- QR 인코딩 (순수 JS, 서버·API 불필요) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // ========================================
+    // 🔳 QR 생성 — 실패해도 화면이 죽지 않게
+    // ========================================
+    function makeQR(text) {
+      if (!text) return null;
+      try {
+        const qr = qrcode(0, 'M');   // 0 = 자동 타입, M = 오류복원 중간
+        qr.addData(text);
+        qr.make();
+        return qr.createDataURL(8, 16);
+      } catch (e) {
+        return null;                 // 내용이 너무 길면 인코딩 실패
+      }
+    }
+
+    // ========================================
+    // 🚀 App
+    // ========================================
+    function App() {
+      const [text, setText] = useState('');
+      const src = makeQR(text.trim());
+      const tooLong = text.trim() && !src;
+
+      // qrcode-generator 는 GIF 를 돌려주므로, canvas 를 거쳐 PNG 로 바꿔 저장한다
+      const download = () => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+
+          const a = document.createElement('a');
+          a.download = 'qrcode.png';
+          a.href = canvas.toDataURL('image/png');
+          a.click();
+        };
+        img.src = src;
+      };
+
+      return (
+        <main className="max-w-sm mx-auto px-5 py-10">
+          <p className="text-xs font-bold tracking-[0.2em] text-indigo-600">하버툴킷</p>
+          <h1 className="mt-1 text-2xl font-bold">QR 코드 생성기</h1>
+          <p className="mt-1 text-sm text-slate-500">링크나 문구를 넣으면 바로 QR이 만들어집니다.</p>
+
+          <div className="mt-7 bg-white rounded-xl shadow-sm p-5">
+            <label htmlFor="text" className="block text-sm font-semibold">내용</label>
+            <textarea
+              id="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={3}
+              placeholder="https://example.com"
+              className="mt-1.5 w-full resize-none rounded-lg border border-slate-300 px-3 py-2
+                         focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+
+            {tooLong && (
+              <p className="mt-2 text-sm text-red-600" role="alert">
+                내용이 너무 깁니다. 조금 줄여주세요.
+              </p>
+            )}
+          </div>
+
+          <div className="mt-6">
+            {src ? (
+              <>
+                <img src={src} alt="생성된 QR 코드"
+                     className="w-full rounded-xl bg-white p-4 shadow-sm" />
+                <button
+                  onClick={download}
+                  className="mt-4 w-full py-3 rounded-xl bg-indigo-600 text-white font-bold
+                             hover:bg-indigo-700"
+                >
+                  PNG로 저장
+                </button>
+              </>
+            ) : (
+              <div className="rounded-xl border-2 border-dashed border-slate-300 py-16 text-center
+                              text-sm text-slate-400">
+                내용을 입력하면 QR이 나타납니다.
+              </div>
+            )}
+          </div>
+
+          <p className="mt-8 text-xs text-slate-400">하버스쿨 AFM 4기 · week-2 quest</p>
+        </main>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
