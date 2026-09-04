@@ -39,3 +39,6 @@ npm-debug.log*
 .playwright-mcp/
 skills-main/
 skills-main.zip
+
+# ── 원본 자료 (타인 저작물 · 공개 배포 안 함) ─────────
+afm-4th/week-2/quest/00_inbox/*.pdf

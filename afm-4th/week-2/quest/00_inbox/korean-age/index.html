@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>만 나이 계산기</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <!-- ⚠️ 모든 CDN 버전 고정. Babel 은 반드시 7.x (8.x 는 인라인 text/babel 미지원) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    // ========================================
+    // 🛠️ 나이 계산
+    // ========================================
+
+    /** "YYYY-MM-DD" -> 시간대 영향 없는 로컬 날짜 */
+    function parseDate(value) {
+      const [y, m, d] = value.split('-').map(Number);
+      const date = new Date(y, m - 1, d);
+      // 2월 30일 같은 값이 넘어오면 Date 가 조용히 이월시키므로 되돌려 확인한다
+      if (date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d) return null;
+      return date;
+    }
+
+    function calculate(birthValue) {
+      const birth = parseDate(birthValue);
+      if (!birth) return { error: '올바른 날짜를 입력하세요.' };
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      if (birth > today) return { error: '태어난 날은 오늘보다 뒤일 수 없습니다.' };
+
+      // 만 나이: 생일이 아직 안 지났으면 한 살 빼기
+      let age = today.getFullYear() - birth.getFullYear();
+      const hadBirthday =
+        today.getMonth() > birth.getMonth() ||
+        (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
+      if (!hadBirthday) age -= 1;
+
+      // 연 나이 (병역·청소년보호법 등에서 쓰는 기준)
+      const yearAge = today.getFullYear() - birth.getFullYear();
+
+      // 다음 생일까지 남은 일수
+      let next = new Date(today.getFullYear(), birth.getMonth(), birth.getDate());
+      if (next < today) next = new Date(today.getFullYear() + 1, birth.getMonth(), birth.getDate());
+      const daysLeft = Math.round((next - today) / 86400000);
+
+      return { age, yearAge, daysLeft };
+    }
+
+    // ========================================
+    // 🚀 App
+    // ========================================
+    function App() {
+      const todayValue = new Date().toLocaleDateString('sv-SE'); // YYYY-MM-DD
+      const [birth, setBirth] = useState('');
+
+      const result = useMemo(() => (birth ? calculate(birth) : null), [birth]);
+
+      return (
+        <main className="min-h-screen flex items-center justify-center px-5 py-12">
+          <div className="w-full max-w-sm">
+            <h1 className="text-2xl font-bold text-center">만 나이 계산기</h1>
+            <p className="mt-2 text-sm text-slate-500 text-center">
+              태어난 날을 입력하면 오늘 기준 만 나이를 계산합니다.
+            </p>
+
+            <div className="mt-8 bg-white rounded-2xl shadow-sm p-6">
+              <label htmlFor="birth" className="block text-sm font-semibold">
+                생년월일
+              </label>
+              <input
+                id="birth"
+                type="date"
+                value={birth}
+                max={todayValue}
+                onChange={(e) => setBirth(e.target.value)}
+                className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-lg
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+
+              {!result && (
+                <p className="mt-6 text-center text-sm text-slate-400">
+                  생년월일을 선택하세요.
+                </p>
+              )}
+
+              {result?.error && (
+                <p className="mt-6 text-center text-sm font-medium text-red-600" role="alert">
+                  {result.error}
+                </p>
+              )}
+
+              {result && !result.error && (
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-slate-500">만 나이</p>
+                  <p className="mt-1 text-6xl font-extrabold text-blue-600">
+                    {result.age}
+                    <span className="ml-1 text-2xl font-bold text-slate-400">세</span>
+                  </p>
+
+                  <dl className="mt-6 pt-5 border-t border-slate-100 grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <dt className="text-slate-500">연 나이</dt>
+                      <dd className="mt-0.5 font-bold">{result.yearAge}세</dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">다음 생일</dt>
+                      <dd className="mt-0.5 font-bold">
+                        {result.daysLeft === 0 ? '오늘 🎉' : `D-${result.daysLeft}`}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              )}
+            </div>
+
+            <p className="mt-4 text-xs text-slate-400 text-center leading-relaxed">
+              연 나이는 <strong className="font-semibold">현재 연도 − 출생 연도</strong>로,
+              병역법·청소년보호법 등에서 쓰는 기준입니다.
+            </p>
+          </div>
+        </main>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
