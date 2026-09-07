@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4계정 포트폴리오 운영 계획</title>
+<style>
+  :root{--ink:#16181d;--sub:#666d7a;--line:#e1e4ea;--accent:#7a3ea8;
+    --a:#0f766e;--b:#1e5eff;--c:#e8590c;--d:#6b7280;--warn:#c92a2a}
+  *{box-sizing:border-box}
+  body{margin:0;background:#f6f7f9;color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:1020px;margin:0 auto;background:#fff;padding:34px 36px 30px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+    border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:16px}
+  h1{font-size:24px;margin:0;letter-spacing:-.02em}
+  h1 span{display:block;font-size:11px;letter-spacing:.14em;color:var(--sub);
+    font-weight:700;margin-bottom:5px}
+  .meta{font-size:11.5px;color:var(--sub);text-align:right;white-space:nowrap;line-height:1.7}
+  .meta b{color:var(--ink)}
+
+  .lead{font-size:13px;background:#f6f4fa;border-radius:8px;padding:12px 15px;
+    margin:0 0 6px;color:#3b4350}
+  .lead b{color:var(--accent)}
+
+  h2{font-size:13px;margin:22px 0 9px;padding-left:8px;border-left:3px solid var(--accent)}
+  h2 em{font-style:normal;color:var(--sub);font-weight:400;margin-left:6px}
+
+  .accts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .acct{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .acct .hd{padding:9px 13px;color:#fff}
+  .A .hd{background:var(--a)} .B .hd{background:var(--b)}
+  .C .hd{background:var(--c)} .D .hd{background:var(--d)}
+  .acct .hd .bm{font-size:10px;letter-spacing:.05em;opacity:.9}
+  .acct .hd h3{margin:2px 0 0;font-size:15.5px}
+  .acct .hd .tag{float:right;font-size:10.5px;background:rgba(255,255,255,.22);
+    padding:2px 8px;border-radius:20px;margin-top:2px}
+  .acct .bd{padding:11px 13px}
+  .acct ol{margin:0;padding-left:0;list-style:none;counter-reset:n}
+  .acct li{counter-increment:n;font-size:11.5px;margin-bottom:9px;padding-left:22px;position:relative}
+  .acct li:last-child{margin-bottom:0}
+  .acct li::before{content:counter(n);position:absolute;left:0;top:1px;
+    width:16px;height:16px;border-radius:50%;font-size:9.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;color:#fff}
+  .A li::before{background:var(--a)} .B li::before{background:var(--b)}
+  .C li::before{background:var(--c)} .D li::before{background:var(--d)}
+  .acct li b{display:block;font-size:12px;margin-bottom:2px}
+  .acct .ev{display:block;margin-top:3px;font-size:10.5px;color:var(--sub);
+    background:#f7f8fa;border-radius:4px;padding:4px 7px}
+  code{background:#f0eef5;border-radius:4px;padding:1px 5px;font-size:10.5px;
+    font-family:ui-monospace,Menlo,Consolas,monospace}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  thead th{background:#f2f4f7;font-size:11.5px;white-space:nowrap}
+  .no{color:var(--warn);font-weight:700}
+  .ok{color:var(--a);font-weight:700}
+
+  .close{border:2px solid var(--accent);border-radius:9px;background:#faf8fd;
+    padding:13px 16px;margin-top:12px;font-size:12.5px}
+  .close b{color:var(--accent)}
+
+  footer{margin-top:16px;padding-top:10px;border-top:1px solid var(--line);
+    font-size:10.5px;color:var(--sub);line-height:1.7}
+  @media (max-width:840px){
+    .sheet{padding:20px 16px}
+    header{flex-direction:column;align-items:flex-start}
+    .meta{text-align:left;white-space:normal}
+    .accts{grid-template-columns:1fr}
+    .scroll{overflow-x:auto}
+  }
+  @media print{body{background:#fff}.sheet{box-shadow:none;padding:0;max-width:none}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <h1><span>ACCOUNT PORTFOLIO ONE-SHEET</span>4계정 포트폴리오 운영 계획</h1>
+  <div class="meta">
+    벤치마킹 4개 계정 → <b>부계정 4개</b> 1:1 대응<br>
+    2026-09-07 &nbsp;|&nbsp; 주제 <b>자동차 주변기기를 잘 알려주는 사람</b>
+  </div>
+</header>
+
+<p class="lead">
+  퀘스트 3에서 60개 게시물을 분석해 공통점 3가지와 빈칸 1개를 찾았다. 문제는 <b>계정 하나로는 이 4개 가설을 동시에 검증할 수 없다</b>는 것이다.
+  그래서 계정마다 가설 하나씩만 태운다. 4개를 다 키우는 게 목적이 아니라, <b>어느 가설이 사는지 3개월 안에 알아내는 것</b>이 목적이다.
+</p>
+
+<h2>01. 계정별 설계 <em>각 4개 항목: 컨셉 · 포맷 · 자동화 · 지표</em></h2>
+<div class="accts">
+
+  <div class="acct A">
+    <div class="hd"><span class="tag">가설 ③ 댓글 전환</span>
+      <div class="bm">벤치마킹 @chairboysss · 반응률 35.2%</div>
+      <h3>🅐 실사용 검증 계정</h3></div>
+    <div class="bd">
+      <ol>
+        <li><b>컨셉 — "직접 사서 30일 쓰고 말합니다"</b>
+          의놈들 상위 게시물은 대부분 <code>#협찬</code>이 붙는다. 그 자리에 내돈내산과 30일 후 상태를 넣는 게 차별점.
+          <span class="ev">근거: Temu 제휴 3건 평균 좋아요 29 · 댓글 2로 전멸</span></li>
+        <li><b>포맷 — 상위 3개의 4컷 구조</b>
+          3초 문제 제기 → 실장착 원컷(설치 1분) → 30일 후 상태 → "댓글에 [키워드]"
+          <span class="ev">EV3 보드 3,160 / 차박매트 181 / 동글 429 전부 이 구조</span></li>
+        <li><b>자동화 — 촬영만 수동</b>
+          편집 CapCut 템플릿 고정 · 캡션 LLM 프롬프트 고정 · 예약 Meta Business Suite · 댓글→DM ManyChat(공식 파트너)</li>
+        <li><b>지표 — 댓글 ÷ 좋아요 ≥ 1.0</b>
+          4주 12개 발행. 미달 시 제품을 바꾸지 말고 <b>후킹 문장만</b> 교체해 재실험.
+          <span class="ev">벤치마크: 동글 릴스 429 / 1,177 = 2.7배</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="acct B">
+    <div class="hd"><span class="tag">가설 ① 내 차의 일</span>
+      <div class="bm">벤치마킹 @your_driving · 최고 6,016</div>
+      <h3>🅑 증상 해석 계정</h3></div>
+    <div class="bd">
+      <ol>
+        <li><b>컨셉 — 너도운전이 비운 자리</b>
+          경고등으로 6,016을 찍고도 사고 블박으로 옮겨갔다. 부품 설명 4건은 좋아요를 아예 숨겼다. 그 자리가 비어 있다.</li>
+        <li><b>포맷 — "지금 답이 필요한" 구조</b>
+          실제 계기판·증상 사진 1장 → 이 불 뜨면 → 원인 3가지 → 지금 당장 할 일
+          <span class="ev">경고등이 터진 이유는 지식이 아니라 지금 내 차에 떠 있어서</span></li>
+        <li><b>자동화 — 소재 고갈을 제보로 해결</b>
+          이 컨셉의 최대 리스크는 소재다. DM·구글폼으로 증상 제보를 받아 DB화하고 증상별 템플릿에 자동 주입. <b>제보가 곧 소재이자 댓글이다.</b></li>
+        <li><b>지표 — 저장(Saves) 우선</b>
+          이 유형은 댓글로 평가하면 안 된다.
+          <span class="ev">경고등 게시물 좋아요 6,016인데 댓글은 58</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="acct C">
+    <div class="hd"><span class="tag">가설 ② 좁힐수록</span>
+      <div class="bm">벤치마킹 @car.jin.nam · 중앙값 265</div>
+      <h3>🅒 규제·인증 알림 계정</h3></div>
+    <div class="bd">
+      <ol>
+        <li><b>컨셉 — 주변기기 각도로 좁히기</b>
+          카진남은 교통뉴스 일반이라 주변기기 규제가 비어 있다. 블박 화질 기준, 등화류 불법개조, 하이패스, 안전삼각대 의무.</li>
+        <li><b>포맷 — 카진남 문법 그대로</b>
+          <code>"따옴표 인용 헤드라인"</code> → <code>⠀공백 줄바꿈</code> → <code>🚨 이모지 불릿</code>
+          <span class="ev">깜빡이 벌점 1,540 · 무단횡단 2,441이 정확히 이 문법</span></li>
+        <li><b>자동화 — 여기만 검수 필수</b>
+          뉴스 RSS·API → 주변기기 키워드 필터 → 요약 초안 자동 생성까지만 자동화. <b>발행 전 사람 검수를 반드시 넣는다.</b> 법규는 오보 한 번에 신뢰가 무너진다.</li>
+        <li><b>지표 — 공유(Shares)</b>
+          카진남 중앙값 265가 기준선. 4주 뒤 중앙값 300을 못 넘기면 주제 재조정.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="acct D">
+    <div class="hd"><span class="tag">빈칸 검증 · 실험대</span>
+      <div class="bm">벤치마킹 @engineering_in_one · 최고 262</div>
+      <h3>🅓 부품 원리 실험대</h3></div>
+    <div class="bd">
+      <ol>
+        <li><b>컨셉 — 공학한장의 실패를 고친 버전</b>
+          26~262에 갇힌 이유는 명확하다. <b>"그래서 뭘 사야 하나"가 없다.</b> 자동차로 한정하고 결론을 붙인다.</li>
+        <li><b>포맷 — 제목은 유지, 마지막 장만 추가</b>
+          <code>"베어링 vs 부싱 1분만에"</code> 제목 문법은 잘 작동한다(144). 여기에 <b>"그래서 당신 차엔 B"</b> 한 장만 더.</li>
+        <li><b>자동화 — 4개 중 가장 자동화 친화적</b>
+          부품 사전 데이터 → 일러스트 템플릿 자동 조판.
+          <span class="ev">공학한장이 하루 8개씩 올리는 게 가능하다는 증거</span></li>
+        <li><b>지표 — 양으로 스캔</b>
+          성과 계정이 아니다. <b>주 20개를 발행해 어떤 부품 주제가 뜨는지 스캔</b>하고, 히트한 주제를 🅐·🅑 본편으로 승격시킨다.</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<h2>02. 운영 경계선 <em>계정을 잃지 않기 위한 선</em></h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>영역</th><th class="ok">해도 되는 것</th><th class="no">하면 안 되는 것</th><th>이유</th></tr></thead>
+  <tbody>
+    <tr><td>계정 수</td><td>한 사람이 여러 계정 운영</td><td>실존 인물·브랜드 이름 차용</td><td>사칭 판정</td></tr>
+    <tr><td>콘텐츠</td><td>계정별로 포맷·소재 분리</td><td>같은 콘텐츠 4계정 복붙</td><td>중복 판정 → 도달 급감</td></tr>
+    <tr><td>발행</td><td>Meta Business Suite·공식 파트너 예약</td><td>비공인 자동 포스팅 툴</td><td>토큰 차단·계정 제재</td></tr>
+    <tr><td>반응</td><td>댓글 키워드 → DM 자동응답(ManyChat)</td><td>자동 좋아요·팔로우 봇</td><td>계정 정지 사유</td></tr>
+    <tr><td>계정 간</td><td>필요 시 콘텐츠 상호 언급</td><td>서로 좋아요·댓글 품앗이</td><td>조작 행위로 분류</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="close">
+  <b>4개를 다 살릴 생각은 하지 않는다.</b>
+  3개월 뒤 하나만 살아남는다고 보고, 나머지 3개는 그 하나를 찾기 위한 비용으로 잡는다.
+  🅓를 성과 계정이 아니라 <b>주 20개 스캔용 실험대</b>로 설계한 이유가 이것이다 — 가장 싸게 가장 많은 주제를 태워보고, 살아난 주제만 🅐·🅑로 올린다.
+  판단 시점은 <b>4주차(포맷 확정) · 12주차(계정 선택)</b> 두 번이면 충분하다.
+</div>
+
+<footer>
+  근거: 퀘스트 3 벤치마킹 분석 — @chairboysss / @your_driving / @car.jin.nam / @engineering_in_one 각 최근 게시물 15개, 총 60개 (2026-09-07 수집)<br>
+  AFM 4기 · Week 3 퀘스트 3 부속 문서 &nbsp;|&nbsp; 플랫폼 정책은 변경될 수 있으므로 실행 전 최신 약관 확인 필요.
+</footer>
+
+</div>
+</body>
+</html>
