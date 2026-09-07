@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>무선 카플레이 동글 구매 결정 리포트</title>
+<style>
+  :root{--ink:#16181d;--sub:#666d7a;--line:#e1e4ea;--accent:#0f766e;
+    --cafe:#03c75a;--coup:#e63946;--warn:#c92a2a}
+  *{box-sizing:border-box}
+  body{margin:0;background:#f6f7f9;color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:980px;margin:0 auto;background:#fff;padding:34px 36px 30px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+    border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:20px}
+  h1{font-size:24px;margin:0;letter-spacing:-.02em}
+  h1 span{display:block;font-size:11px;letter-spacing:.14em;color:var(--sub);
+    font-weight:700;margin-bottom:5px}
+  .meta{font-size:11.5px;color:var(--sub);text-align:right;white-space:nowrap;line-height:1.7}
+  .meta b{color:var(--ink)}
+
+  h2{font-size:13px;margin:22px 0 9px;padding-left:8px;border-left:3px solid var(--accent)}
+  h2 em{font-style:normal;color:var(--sub);font-weight:400;margin-left:6px}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .box{border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .box .src{font-size:10.5px;font-weight:800;letter-spacing:.05em;color:#fff;
+    display:inline-block;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+  .box.cafe .src{background:var(--cafe)}
+  .box.coup .src{background:var(--coup)}
+  .box ul{margin:0;padding-left:16px;font-size:12px}
+  .box li{margin-bottom:5px}
+  .box li:last-child{margin-bottom:0}
+  .q{color:var(--sub);font-style:italic}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  thead th{background:#f2f4f7;font-size:11.5px;white-space:nowrap}
+  td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pick{background:#eefaf5}
+  .pick td{font-weight:700}
+  .bad{color:var(--warn)}
+  .note{font-size:10.5px;color:var(--sub);margin:5px 0 0}
+
+  .clash{border:2px solid #f0a500;border-radius:8px;background:#fffaf0;
+    padding:12px 15px;margin-top:10px;font-size:12.5px}
+  .clash b{color:#a06800}
+  .clash div{margin-bottom:6px}
+  .clash div:last-child{margin-bottom:0}
+
+  .crit{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+  .crit div{border:1px dashed #b9c6c3;border-radius:6px;padding:8px 10px;font-size:11.5px}
+  .crit b{color:var(--accent)}
+  .verdict{border:2px solid var(--accent);border-radius:8px;padding:14px 16px;background:#f4fbf9}
+  .verdict .big{font-size:16px;font-weight:800;color:#0b5b54;margin-bottom:8px}
+  .verdict ol{margin:0;padding-left:17px;font-size:12.5px}
+  .verdict li{margin-bottom:5px}
+  .verdict li:last-child{margin-bottom:0}
+  .yn{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .yn div{border-radius:6px;padding:9px 11px;font-size:11.5px}
+  .buy{background:#e7f6ef;border:1px solid #a8d5c2}
+  .no{background:#fdecec;border:1px solid #f0b7b7}
+  .yn b{display:block;margin-bottom:3px}
+
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .shots figure{margin:0}
+  .shots img{width:100%;height:80px;object-fit:cover;object-position:top center;
+    border:1px solid var(--line);border-radius:4px;display:block}
+  .shots figcaption{font-size:9.5px;color:var(--sub);margin-top:3px}
+
+  footer{margin-top:16px;padding-top:10px;border-top:1px solid var(--line);
+    font-size:10.5px;color:var(--sub);line-height:1.7}
+  footer a{color:#2a5db0;text-decoration:none}
+  @media (max-width:780px){
+    .sheet{padding:20px 16px}
+    header{flex-direction:column;align-items:flex-start}
+    .meta{text-align:left;white-space:normal}
+    .two,.crit,.yn{grid-template-columns:1fr}
+    .shots{grid-template-columns:repeat(2,1fr)}
+    .scroll{overflow-x:auto}
+  }
+  @media print{body{background:#fff}.sheet{box-shadow:none;padding:0;max-width:none}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <h1><span>PURCHASE DECISION ONE-SHEET</span>무선 카플레이 동글, 살까 말까</h1>
+  <div class="meta">
+    네이버 카페 <b>아사모</b> 여론 × <b>쿠팡</b> 최저가<br>
+    2026-09-07 조회 &nbsp;|&nbsp; 카페 글 15건 · 쿠팡 상품 57건
+  </div>
+</header>
+
+<h2>01. 두 채널이 말하는 것 <em>카페는 문제를, 쿠팡은 가격을 말한다</em></h2>
+<div class="two">
+  <div class="box cafe">
+    <span class="src">네이버 카페 아사모 · 최근 글 15건</span>
+    <ul>
+      <li><b>기능 오해가 가장 흔함.</b> 동글은 <u>유선 카플레이 차량을 무선으로 바꿔주는 것뿐</u>. 커넥트·내비 구독과 무관 <span class="q">(댓글 15)</span></li>
+      <li><b>배터리가 빨리 닳는다.</b> 와이파이+블투 동시 연결 + 미러링이라 폰 AP 부하가 큼. <span class="bad">"그래서 유선 충전 케이블 꽂아둡니다"</span></li>
+      <li><b>저가품은 발열·GPS 문제.</b> 알리 1.5만원대 → 30분에 배터리 10%, 터널 GPS 수신 불가</li>
+      <li><b>수명이 있다.</b> "1년 넘게 쓰니 유선이 더 빠르다", 카링킷 3.0은 5년 쓰고 버벅임</li>
+      <li><b>iOS 26.x 자체 버그.</b> 무선 카플레이 끊김·리부팅 <span class="q">(조회 2,469 · 댓글 23)</span></li>
+      <li>추천 브랜드: <b>메이튼 오토프로M</b>("한 달째 끊긴 적 없음")</li>
+    </ul>
+  </div>
+  <div class="box coup">
+    <span class="src">쿠팡 · '무선 카플레이 동글' 검색</span>
+    <ul>
+      <li>리뷰 1위 <b>메이튼 오토프로M</b> 40,700원 ★4.5 <b>리뷰 1,902</b></li>
+      <li>2위 메이튼 오토프로 61,920원 ★4.0 리뷰 1,854</li>
+      <li>3위 ANNIBER CP88 29,010원 ★4.5 리뷰 1,353 <span class="q">(3년 무상보증)</span></li>
+      <li>NICESUN M2 41,610원 ★4.5 리뷰 992</li>
+      <li>OFIYAA CA-27 27,800원 ★5.0 리뷰 793</li>
+      <li class="bad">정가 표기 신뢰 불가 — ANNIBER는 "169,900원 → 29,010원"(83% 할인)</li>
+    </ul>
+  </div>
+</div>
+
+<h2>02. 교차 검증 <em>카페 언급량과 쿠팡 판매량이 어긋나는 지점</em></h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>브랜드</th><th>쿠팡 가격</th><th>별점</th><th>쿠팡 리뷰</th><th>아사모 카페 여론</th><th>판정</th></tr></thead>
+  <tbody>
+    <tr class="pick"><td>메이튼 오토프로M</td><td class="n">40,700원</td><td class="n">4.5</td><td class="n">1,902</td><td>"한 달째 끊김 없음", "GPS 튄 적 없음", 설치 1분</td><td>여론·데이터 일치 ✅</td></tr>
+    <tr><td>카링킷 5.0</td><td class="n">75,000원</td><td class="n">4.5</td><td class="n bad">104</td><td>가장 많이 언급되지만 <b>신형 듀얼링크 GPS 불량</b> + CS가 복붙 매뉴얼만 회신</td><td class="bad">언급 많고 실구매 적음 ⚠️</td></tr>
+    <tr><td>ANNIBER CP88</td><td class="n">29,010원</td><td class="n">4.5</td><td class="n">1,353</td><td>카페 언급 없음 (쿠팡 전용 브랜드로 보임)</td><td>검증 불가 ❓</td></tr>
+    <tr><td>알리 저가품</td><td class="n">~15,000원</td><td>—</td><td>—</td><td>발열, 30분당 배터리 10%, 터널 GPS 불가, "버린 게 몇 개"</td><td class="bad">비추천 ❌</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="clash">
+  <div><b>모순 1 — 가격만 보면 카링킷, 후기를 보면 메이튼.</b>
+  카링킷은 카페에서 사실상 표준처럼 불리는 이름인데, 쿠팡에선 <b>가장 비싸고(75,000원) 리뷰는 가장 적다(104건)</b>. 반대로 메이튼 오토프로M은 카페 추천과 쿠팡 리뷰 1위(1,902건)가 정확히 겹친다. <b>인지도와 실제 구매는 다른 곳을 향하고 있다.</b></div>
+  <div><b>모순 2 — 선을 없애려고 사는데, 결국 선을 꽂는다.</b>
+  동글의 구매 이유는 "케이블 꽂기 귀찮음" 하나인데, 카페의 기술 설명 댓글은 배터리 소모 때문에 <b>"무선인 게 딱히 소용이 없지만 유선 충전을 꽂아둔다"</b>고 말한다. 상품 페이지에는 이 얘기가 없다.</div>
+  <div><b>모순 3 — 정가가 허수다.</b>
+  쿠팡 상위 상품 대부분이 60~83% 할인을 표기한다. ANNIBER는 169,900원 → 29,010원. <b>정가는 무시하고 절대 가격만 봐야 한다.</b></div>
+</div>
+
+<h2>03. 나의 판단 기준</h2>
+<div class="crit">
+  <div><b>① 내 차가 유선 전용인가</b> — 최신차는 무선 카플레이가 기본. 그러면 살 이유가 없다.</div>
+  <div><b>② 충전선을 안 꽂을 자신이 있나</b> — 꽂게 된다면 무선의 의미가 사라진다.</div>
+  <div><b>③ 1~2년 뒤를 감수하나</b> — 성능 저하 후기가 반복된다. 소모품으로 볼 것.</div>
+</div>
+
+<div class="verdict">
+  <div class="big">결론 — 조건부 "산다". 단, 메이튼 오토프로M 40,700원(쿠팡) 하나로 한정.</div>
+  <ol>
+    <li><b>제품은 여론과 데이터가 겹치는 것만.</b> 카페 추천과 쿠팡 리뷰 1위가 일치하는 건 메이튼 오토프로M뿐이다. 카링킷은 이름값이 실적을 못 따라가고, ANNIBER는 리뷰는 많아도 카페에 사용기가 없어 교차 검증이 안 된다.</li>
+    <li><b>채널은 쿠팡.</b> 같은 제품이 네이버 브랜드스토어 41,900~42,900원, 쿠팡 40,700원. <b>쿠팡이 1,200~2,200원 저렴</b>하고 무료배송·내일 도착이다.</li>
+    <li><b>1.5만원대 알리 제품은 사지 않는다.</b> 아낀 2.5만원의 대가가 발열·배터리·터널 GPS인데, 이건 내비를 쓰는 상황에서 정확히 가장 곤란한 세 가지다.</li>
+    <li><b>다만 기대치는 낮춘다.</b> 배터리 때문에 결국 충전선을 꽂게 될 가능성이 높다. 그러면 이 제품은 "선을 없애는 물건"이 아니라 <b>"시동 걸면 자동 연결되는 편의"</b>를 4만원에 사는 것이다. 그 값어치가 있다고 판단해 산다.</li>
+  </ol>
+  <div class="yn">
+    <div class="buy"><b>이런 사람은 사도 된다</b>유선 카플레이만 되는 구형차 · 단거리 위주 주행 · 매번 케이블 꽂는 게 실제로 스트레스인 사람</div>
+    <div class="no"><b>이런 사람은 사지 마라</b>무선 카플레이 되는 최신차 · 장거리 주행 많은 사람 · 무손실 음질이 중요한 사람(유선 &gt; 동글 &gt; 블루투스)</div>
+  </div>
+</div>
+
+<h2>04. 에이전트 브라우징 기록</h2>
+<div class="shots">
+  <figure><img src="shots/01-asamo-search.png" alt="아사모 검색"><figcaption>① 아사모 '카플레이 동글' 검색 15건</figcaption></figure>
+  <figure><img src="shots/02-asamo-article.png" alt="아사모 글"><figcaption>② 카페 글·댓글 정독</figcaption></figure>
+  <figure><img src="shots/03-coupang-search.png" alt="쿠팡 검색"><figcaption>③ 쿠팡 가격·별점·리뷰</figcaption></figure>
+  <figure><img src="shots/04-coupang-carlinkit.png" alt="쿠팡 카링킷"><figcaption>④ 카링킷 교차 확인</figcaption></figure>
+</div>
+<p class="note">※ 카페 스크린샷의 계정 정보(닉네임·아이디)는 캡처 전 ●●●●● 로 마스킹 처리함. 광고성 게시글 1건(제품 홍보 문구 제목·조회 48·댓글 0)은 분석에서 제외.</p>
+
+<footer>
+  <b>출처</b>
+  <a href="https://cafe.naver.com/appleiphone">네이버 카페 아사모</a> — 검색어 '카플레이 동글' 최신순 15건 (글 9005493 / 9081679 / 9018117 / 9072591 / 9071445 / 9071715 정독) ·
+  <a href="https://www.coupang.com/np/search?q=%EB%AC%B4%EC%84%A0%20%EC%B9%B4%ED%94%8C%EB%A0%88%EC%9D%B4%20%EB%8F%99%EA%B8%80">쿠팡 '무선 카플레이 동글'</a> ·
+  <a href="https://www.coupang.com/np/search?q=%EC%B9%B4%EB%A7%81%ED%82%B7%20%EB%AC%B4%EC%84%A0%20%EC%B9%B4%ED%94%8C%EB%A0%88%EC%9D%B4">쿠팡 '카링킷'</a> ·
+  네이버 브랜드스토어 메이튼(가격 대조)<br>
+  AFM 4기 · Week 3 퀘스트 2 &nbsp;|&nbsp; 가격·리뷰는 2026-09-07 조회 시점 기준이며 실시간 변동됨.
+</footer>
+
+</div>
+</body>
+</html>
