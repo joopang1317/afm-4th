@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인스타 벤치마킹 분석 → 콘텐츠 기획안 3개</title>
+<style>
+  :root{--ink:#16181d;--sub:#666d7a;--line:#e1e4ea;--accent:#7a3ea8;
+    --hit:#0f766e;--miss:#c92a2a;--warn:#a06800}
+  *{box-sizing:border-box}
+  body{margin:0;background:#f6f7f9;color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:1000px;margin:0 auto;background:#fff;padding:34px 36px 30px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+  header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+    border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:20px}
+  h1{font-size:24px;margin:0;letter-spacing:-.02em}
+  h1 span{display:block;font-size:11px;letter-spacing:.14em;color:var(--sub);
+    font-weight:700;margin-bottom:5px}
+  .meta{font-size:11.5px;color:var(--sub);text-align:right;white-space:nowrap;line-height:1.7}
+  .meta b{color:var(--ink)}
+
+  h2{font-size:13px;margin:22px 0 9px;padding-left:8px;border-left:3px solid var(--accent)}
+  h2 em{font-style:normal;color:var(--sub);font-weight:400;margin-left:6px}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  thead th{background:#f2f4f7;font-size:11.5px;white-space:nowrap}
+  td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .top{background:#eefaf5;font-weight:700}
+  .low{background:#fdf2f2;color:#8a2b2b}
+  .note{font-size:10.5px;color:var(--sub);margin:5px 0 0}
+
+  .findings{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:6px}
+  .f{border:1px solid var(--line);border-radius:9px;padding:13px 14px}
+  .f .no{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:#fff;
+    background:var(--accent);padding:2px 8px;border-radius:20px}
+  .f h3{margin:8px 0 6px;font-size:14.5px;line-height:1.35}
+  .f p{margin:0 0 7px;font-size:12px;color:#3b4350}
+  .f .ev{font-size:11px;background:#f6f4fa;border-radius:6px;padding:7px 9px;color:#4a4458}
+  .f .ev b{color:var(--accent)}
+
+  .gap{border:2px solid var(--warn);border-radius:9px;background:#fffaf0;
+    padding:13px 16px;margin-top:12px;font-size:12.5px}
+  .gap b{color:var(--warn)}
+
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+  .plan{border:2px solid var(--accent);border-radius:9px;padding:0;overflow:hidden}
+  .plan .hd{background:var(--accent);color:#fff;padding:9px 13px}
+  .plan .hd .kicker{font-size:10px;letter-spacing:.06em;opacity:.85}
+  .plan .hd h3{margin:2px 0 0;font-size:15px}
+  .plan .bd{padding:12px 13px}
+  .plan dl{margin:0;font-size:11.5px}
+  .plan dt{font-weight:700;color:var(--accent);margin-top:8px}
+  .plan dt:first-child{margin-top:0}
+  .plan dd{margin:2px 0 0;color:#3b4350}
+  .plan .hook{background:#f6f4fa;border-radius:6px;padding:8px 10px;font-size:12px;
+    font-weight:700;margin-bottom:9px;line-height:1.4}
+  .plan .apply{font-size:10.5px;color:var(--sub);border-top:1px dashed var(--line);
+    margin-top:10px;padding-top:7px}
+
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .shots figure{margin:0}
+  .shots img{width:100%;height:96px;object-fit:cover;object-position:top center;
+    border:1px solid var(--line);border-radius:5px;display:block}
+  .shots figcaption{font-size:10px;color:var(--sub);margin-top:3px}
+
+  footer{margin-top:16px;padding-top:10px;border-top:1px solid var(--line);
+    font-size:10.5px;color:var(--sub);line-height:1.7}
+  @media (max-width:880px){
+    .sheet{padding:20px 16px}
+    header{flex-direction:column;align-items:flex-start}
+    .meta{text-align:left;white-space:normal}
+    .findings,.plans{grid-template-columns:1fr}
+    .shots{grid-template-columns:repeat(2,1fr)}
+    .scroll{overflow-x:auto}
+  }
+  @media print{body{background:#fff}.sheet{box-shadow:none;padding:0;max-width:none}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <h1><span>INSTAGRAM BENCHMARK ONE-SHEET</span>자동차 주변기기 콘텐츠, 무엇이 통하는가</h1>
+  <div class="meta">
+    벤치마킹 <b>4개 계정 × 최근 15개 = 60개 게시물</b><br>
+    2026-09-07 수집 &nbsp;|&nbsp; 내 주제 <b>자동차 주변기기를 잘 알려주는 사람</b>
+  </div>
+</header>
+
+<h2>01. 벤치마킹 계정 <em>규모가 아니라 반응률로 골랐다</em></h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>계정</th><th>성격</th><th class="n">팔로워</th><th class="n">게시물</th><th class="n">최고 좋아요</th><th class="n">중앙값</th><th class="n">반응률*</th></tr></thead>
+  <tbody>
+    <tr class="top"><td>@chairboysss<br>의놈들</td><td>차량·캠핑 용품 실사용 리뷰 (릴스)</td><td class="n">8,968</td><td class="n">84</td><td class="n">3,160</td><td class="n">73</td><td class="n">35.2%</td></tr>
+    <tr><td>@your_driving<br>너도운전</td><td>운전 상식·사고 해설 (릴스)</td><td class="n">302,000</td><td class="n">583</td><td class="n">6,016</td><td class="n">1,584</td><td class="n">2.0%</td></tr>
+    <tr><td>@car.jin.nam<br>카진남</td><td>자동차 뉴스·법규 카드뉴스</td><td class="n">160,000</td><td class="n">831</td><td class="n">2,441</td><td class="n">265</td><td class="n">1.5%</td></tr>
+    <tr><td>@engineering_in_one<br>공학한장</td><td>부품·원리 1장 요약 (카드/릴스)</td><td class="n">24,000</td><td class="n">216</td><td class="n">262</td><td class="n">64</td><td class="n">1.1%</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">* 반응률 = 최고 좋아요 ÷ 팔로워. 팔로워 9천짜리 계정이 30만 계정의 절반에 달하는 좋아요를 뽑는다는 점이 이번 분석의 출발점이다.</p>
+
+<h2>02. 무엇이 터지고 무엇이 죽었나 <em>60개 게시물 중 양극단</em></h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>계정</th><th>게시물</th><th class="n">좋아요</th><th class="n">댓글</th><th>판정</th></tr></thead>
+  <tbody>
+    <tr class="top"><td>너도운전</td><td>자동차 <b>빨강색 경고등</b> 정리</td><td class="n">6,016</td><td class="n">58</td><td>지금 내 계기판에 뜬 걸 해석해줌</td></tr>
+    <tr class="top"><td>의놈들</td><td>EV3 차박 <b>평탄화 보드</b></td><td class="n">3,160</td><td class="n">1,573</td><td>차종 특정 + 불편 해결</td></tr>
+    <tr class="top"><td>너도운전</td><td>유도선 안/바깥 <b>사고 블박</b></td><td class="n">2,842</td><td class="n">543</td><td>나도 매일 겪는 상황</td></tr>
+    <tr class="top"><td>카진남</td><td><b>무단횡단</b> 벌금보다 무서운 것</td><td class="n">2,441</td><td class="n">315</td><td>내 과실이 될 수 있는 상황</td></tr>
+    <tr><td>의놈들</td><td>벤딕트 <b>무선 카플레이 동글</b></td><td class="n">429</td><td class="n">1,177</td><td>댓글이 좋아요의 2.7배</td></tr>
+    <tr class="low"><td>의놈들</td><td>Temu 커피저울 (제휴코드)</td><td class="n">11</td><td class="n">0</td><td>제휴 링크형 = 전멸</td></tr>
+    <tr class="low"><td>의놈들</td><td>Temu 선풍기 (제휴코드)</td><td class="n">33</td><td class="n">2</td><td>〃</td></tr>
+    <tr class="low"><td>공학한장</td><td>아스팔트 포장의 종류</td><td class="n">26</td><td class="n">0</td><td>내 문제가 아님</td></tr>
+    <tr class="low"><td>너도운전</td><td>자동차 기어·옵션 설명 4편</td><td colspan="2" class="n">좋아요 비공개</td><td>성과 저조로 숨긴 것으로 추정</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>03. 반응 좋은 게시물의 공통점 3가지</h2>
+<div class="findings">
+  <div class="f">
+    <span class="no">공통점 1</span>
+    <h3>"지금 내 차에 일어난 일"을 다룬다</h3>
+    <p>제품 소개가 아니라 <b>이미 벌어진 상황의 해석</b>을 줄 때 터진다. 경고등, 사고 과실, 벌점은 전부 "내가 지금 답을 알아야 하는 것"이다.</p>
+    <div class="ev">경고등 정리 <b>6,016</b> · 유도선 사고 <b>2,842</b> · 무단횡단 <b>2,441</b><br>
+    ↔ 아스팔트 포장 종류 <b>26</b> · 기어 설명 <b>비공개</b></div>
+  </div>
+  <div class="f">
+    <span class="no">공통점 2</span>
+    <h3>차종·상황을 좁힐수록 커진다</h3>
+    <p>"차량용품 3가지"보다 <b>"EV3 차박할 때"</b>가 20배 잘 나온다. 대상을 좁히면 도달은 줄어도 <b>"이거 내 얘기다"</b>가 폭발한다.</p>
+    <div class="ev">EV3 평탄화 보드 <b>3,160</b> · 차박매트 <b>181</b><br>
+    ↔ 범용 "차량용품 3가지" <b>157</b> · "여름 캠핑용품 3가지" <b>36</b></div>
+  </div>
+  <div class="f">
+    <span class="no">공통점 3</span>
+    <h3>댓글 키워드가 좋아요를 앞지른다</h3>
+    <p>"댓글에 <b>무선</b> 남겨주세요" 한 줄이 댓글을 좋아요의 <b>2.7배</b>로 만든다. 반면 제휴코드를 본문에 박으면 즉시 죽는다.</p>
+    <div class="ev">동글 좋아요 429 / <b>댓글 1,177</b> · 방수커버 274 / <b>741</b><br>
+    ↔ Temu 제휴코드 3건 평균 좋아요 <b>29</b> · 댓글 <b>2</b></div>
+  </div>
+</div>
+
+<div class="gap">
+  <b>그리고 빈칸 하나 — "이 계정들이 안 하고 있는 것".</b>
+  60개를 훑는 동안 <b>주변기기의 작동 원리를 설명하면서 동시에 반응이 나온 게시물은 단 한 건도 없었다.</b>
+  너도운전은 원리를 알지만 사고 영상으로 흘렀고(부품 설명 4건은 좋아요를 숨겼다), 공학한장은 원리 설명이 최고 수준이지만 자동차가 아니라 산업 설비를 다루며 좋아요 26~262에 갇혀 있다.
+  의놈들은 반응은 최고지만 "왜 좋은지"는 말하지 않는다 — 카플레이 동글 릴스에도 <b>배터리가 왜 닳는지는 없다</b>.
+  <b>제품을 파는 사람과 원리를 아는 사람이 갈라져 있고, 그 사이가 비어 있다.</b>
+</div>
+
+<h2>04. 내 콘텐츠 기획안 3개 <em>주제: 자동차 주변기기를 잘 알려주는 사람</em></h2>
+<div class="plans">
+
+  <div class="plan">
+    <div class="hd"><div class="kicker">PLAN 01 · 원리 + 상황 결합</div><h3>"왜 무선인데 선을 꽂게 되나"</h3></div>
+    <div class="bd">
+      <div class="hook">🎣 후킹: "무선 카플레이 동글 샀는데 왜 결국 충전선 꽂고 계세요?"</div>
+      <dl>
+        <dt>포맷</dt><dd>릴스 30초 — 실차에서 배터리 % 타임랩스 → 원리 자막 3컷 → 결론</dd>
+        <dt>내용</dt><dd>와이파이+블루투스 동시 연결에 화면 미러링까지 얹히니 폰 AP 부하가 커진다. 그래서 무선을 사도 충전선이 따라온다.</dd>
+        <dt>댓글 장치</dt><dd>"내 차가 유선 전용인지 헷갈리면 댓글에 <b>차종</b> 남겨주세요"</dd>
+      </dl>
+      <div class="apply">공통점 ①(내 차에 일어난 일) + ③(댓글 키워드) 적용. 빈칸인 "원리를 말하는 제품 콘텐츠"를 정면으로 채운다.</div>
+    </div>
+  </div>
+
+  <div class="plan">
+    <div class="hd"><div class="kicker">PLAN 02 · 차종 특정</div><h3>"○○ 오너만 보세요" 시리즈</h3></div>
+    <div class="bd">
+      <div class="hook">🎣 후킹: "팰리세이드 LX3 사고 이거 안 달면 6개월 뒤 후회합니다"</div>
+      <dl>
+        <dt>포맷</dt><dd>차종 1개 = 게시물 1개. 실장착 컷 + 사이즈 안 맞는 제품 비교컷</dd>
+        <dt>내용</dt><dd>신차 출시 사이클에 맞춰 차종별 전용 주변기기를 정합성 기준으로 검증. 범용품이 왜 안 맞는지를 실물로 보여준다.</dd>
+        <dt>댓글 장치</dt><dd>"다음에 다뤄줬으면 하는 <b>차종</b>을 댓글로"</dd>
+      </dl>
+      <div class="apply">공통점 ②(좁힐수록 커진다) 정면 적용. EV3 게시물이 범용 게시물의 20배였던 패턴을 그대로 이식한다.</div>
+    </div>
+  </div>
+
+  <div class="plan">
+    <div class="hd"><div class="kicker">PLAN 03 · 사지 말라고 말하기</div><h3>"이 가격대는 사지 마세요"</h3></div>
+    <div class="bd">
+      <div class="hook">🎣 후킹: "1만 5천원짜리 동글, 아낀 2만 5천원의 대가입니다"</div>
+      <dl>
+        <dt>포맷</dt><dd>카드뉴스 5장 — ①증상 ②원인 ③가격대별 경계선 ④살 것 ⑤안 살 것</dd>
+        <dt>내용</dt><dd>저가품의 발열·배터리·터널 GPS 문제처럼 <b>상품 페이지에 없는 실패 사례</b>를 근거로 "안 사도 되는 것"을 먼저 말한다.</dd>
+        <dt>댓글 장치</dt><dd>"싸게 샀다 후회한 용품, 댓글로 제보해주세요" → 다음 회차 소재로 순환</dd>
+      </dl>
+      <div class="apply">4개 계정 모두 "추천"만 하고 "비추천"은 안 한다. 제휴 링크형이 전멸(평균 좋아요 29)한 이유도 여기 있다 — 신뢰가 없다.</div>
+    </div>
+  </div>
+
+</div>
+
+<h2>05. 에이전트 브라우징 기록</h2>
+<div class="shots">
+  <figure><img src="shots/01-chairboysss.png" alt="의놈들"><figcaption>① @chairboysss (8,968)</figcaption></figure>
+  <figure><img src="shots/02-your-driving.png" alt="너도운전"><figcaption>② @your_driving (302K)</figcaption></figure>
+  <figure><img src="shots/03-car-jin-nam.png" alt="카진남"><figcaption>③ @car.jin.nam (160K)</figcaption></figure>
+  <figure><img src="shots/04-engineering-in-one.png" alt="공학한장"><figcaption>④ @engineering_in_one (24K)</figcaption></figure>
+</div>
+<p class="note">※ 계정 4곳의 최근 게시물을 15개씩만, 요청 간 2.5초 간격을 두고 천천히 수집했다. 캡처 속 내 계정 정보는 ●●●●● 로 마스킹 처리함. 좋아요·댓글 수는 게시물 메타데이터 기준.</p>
+
+<footer>
+  <b>출처</b> instagram.com/chairboysss · /your_driving · /car.jin.nam · /engineering_in_one (각 최근 게시물 15개, 2026-09-07 수집)<br>
+  AFM 4기 · Week 3 퀘스트 3 &nbsp;|&nbsp; 수치는 수집 시점 기준이며 실시간 변동됨.
+</footer>
+
+</div>
+</body>
+</html>
