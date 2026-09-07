@@ -50,6 +50,23 @@
   .acct li b{display:block;font-size:12px;margin-bottom:2px}
   .acct .ev{display:block;margin-top:3px;font-size:10.5px;color:var(--sub);
     background:#f7f8fa;border-radius:4px;padding:4px 7px}
+  .ref{display:flex;align-items:center;gap:9px;margin:7px 0 4px;padding:6px;
+    border:1px solid var(--line);border-radius:6px;background:#fbfbfc;
+    text-decoration:none;color:inherit}
+  .ref img{width:104px;height:62px;object-fit:cover;object-position:top center;
+    border:1px solid var(--line);border-radius:4px;display:block;flex:none}
+  .ref .h{font-size:11.5px;font-weight:700;line-height:1.35}
+  .ref .h .u{color:#2a5db0}
+  .ref .h span{display:block;font-weight:400;font-size:10.5px;color:var(--sub);margin-top:2px}
+
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .shots figure{margin:0}
+  .shots img{width:100%;height:104px;object-fit:cover;object-position:top center;
+    border:1px solid var(--line);border-radius:5px;display:block}
+  .shots figcaption{font-size:10px;color:var(--sub);margin-top:3px}
+  .shots a{text-decoration:none;color:var(--sub)}
+  .note{font-size:10.5px;color:var(--sub);margin:6px 0 0}
+
   code{background:#f0eef5;border-radius:4px;padding:1px 5px;font-size:10.5px;
     font-family:ui-monospace,Menlo,Consolas,monospace}
 
@@ -70,6 +87,7 @@
     header{flex-direction:column;align-items:flex-start}
     .meta{text-align:left;white-space:normal}
     .accts{grid-template-columns:1fr}
+    .shots{grid-template-columns:repeat(2,1fr)}
     .scroll{overflow-x:auto}
   }
   @media print{body{background:#fff}.sheet{box-shadow:none;padding:0;max-width:none}}
@@ -102,7 +120,8 @@
       <ol>
         <li><b>컨셉 — "직접 사서 30일 쓰고 말합니다"</b>
           의놈들 상위 게시물은 대부분 <code>#협찬</code>이 붙는다. 그 자리에 내돈내산과 30일 후 상태를 넣는 게 차별점.
-          <span class="ev">근거: Temu 제휴 3건 평균 좋아요 29 · 댓글 2로 전멸</span></li>
+          <span class="ev">근거: Temu 제휴 3건 평균 좋아요 29 · 댓글 2로 전멸</span>
+          <a class="ref" href="https://www.instagram.com/chairboysss/" target="_blank" rel="noopener"><img src="shots/01-chairboysss.png" alt="@chairboysss 프로필 캡처"><span class="h"><span class="u" style="display:inline;font-weight:700">@chairboysss ↗</span><span>의놈들 · 팔로워 8,968 · 게시물 84</span></span></a></li>
         <li><b>포맷 — 상위 3개의 4컷 구조</b>
           3초 문제 제기 → 실장착 원컷(설치 1분) → 30일 후 상태 → "댓글에 [키워드]"
           <span class="ev">EV3 보드 3,160 / 차박매트 181 / 동글 429 전부 이 구조</span></li>
@@ -122,7 +141,8 @@
     <div class="bd">
       <ol>
         <li><b>컨셉 — 너도운전이 비운 자리</b>
-          경고등으로 6,016을 찍고도 사고 블박으로 옮겨갔다. 부품 설명 4건은 좋아요를 아예 숨겼다. 그 자리가 비어 있다.</li>
+          경고등으로 6,016을 찍고도 사고 블박으로 옮겨갔다. 부품 설명 4건은 좋아요를 아예 숨겼다. 그 자리가 비어 있다.
+          <a class="ref" href="https://www.instagram.com/your_driving/" target="_blank" rel="noopener"><img src="shots/02-your-driving.png" alt="@your_driving 프로필 캡처"><span class="h"><span class="u" style="display:inline;font-weight:700">@your_driving ↗</span><span>너도운전 · 팔로워 302K · 게시물 583</span></span></a></li>
         <li><b>포맷 — "지금 답이 필요한" 구조</b>
           실제 계기판·증상 사진 1장 → 이 불 뜨면 → 원인 3가지 → 지금 당장 할 일
           <span class="ev">경고등이 터진 이유는 지식이 아니라 지금 내 차에 떠 있어서</span></li>
@@ -142,7 +162,8 @@
     <div class="bd">
       <ol>
         <li><b>컨셉 — 주변기기 각도로 좁히기</b>
-          카진남은 교통뉴스 일반이라 주변기기 규제가 비어 있다. 블박 화질 기준, 등화류 불법개조, 하이패스, 안전삼각대 의무.</li>
+          카진남은 교통뉴스 일반이라 주변기기 규제가 비어 있다. 블박 화질 기준, 등화류 불법개조, 하이패스, 안전삼각대 의무.
+          <a class="ref" href="https://www.instagram.com/car.jin.nam/" target="_blank" rel="noopener"><img src="shots/03-car-jin-nam.png" alt="@car.jin.nam 프로필 캡처"><span class="h"><span class="u" style="display:inline;font-weight:700">@car.jin.nam ↗</span><span>카진남 · 팔로워 160K · 게시물 831</span></span></a></li>
         <li><b>포맷 — 카진남 문법 그대로</b>
           <code>"따옴표 인용 헤드라인"</code> → <code>⠀공백 줄바꿈</code> → <code>🚨 이모지 불릿</code>
           <span class="ev">깜빡이 벌점 1,540 · 무단횡단 2,441이 정확히 이 문법</span></li>
@@ -161,7 +182,8 @@
     <div class="bd">
       <ol>
         <li><b>컨셉 — 공학한장의 실패를 고친 버전</b>
-          26~262에 갇힌 이유는 명확하다. <b>"그래서 뭘 사야 하나"가 없다.</b> 자동차로 한정하고 결론을 붙인다.</li>
+          26~262에 갇힌 이유는 명확하다. <b>"그래서 뭘 사야 하나"가 없다.</b> 자동차로 한정하고 결론을 붙인다.
+          <a class="ref" href="https://www.instagram.com/engineering_in_one/" target="_blank" rel="noopener"><img src="shots/04-engineering-in-one.png" alt="@engineering_in_one 프로필 캡처"><span class="h"><span class="u" style="display:inline;font-weight:700">@engineering_in_one ↗</span><span>공학한장 · 팔로워 24K · 게시물 216</span></span></a></li>
         <li><b>포맷 — 제목은 유지, 마지막 장만 추가</b>
           <code>"베어링 vs 부싱 1분만에"</code> 제목 문법은 잘 작동한다(144). 여기에 <b>"그래서 당신 차엔 B"</b> 한 장만 더.</li>
         <li><b>자동화 — 4개 중 가장 자동화 친화적</b>
@@ -195,6 +217,15 @@
   🅓를 성과 계정이 아니라 <b>주 20개 스캔용 실험대</b>로 설계한 이유가 이것이다 — 가장 싸게 가장 많은 주제를 태워보고, 살아난 주제만 🅐·🅑로 올린다.
   판단 시점은 <b>4주차(포맷 확정) · 12주차(계정 선택)</b> 두 번이면 충분하다.
 </div>
+
+<h2>03. 에이전트 크롤링 캡처 <em>퀘스트 3 수집 근거 · 계정 클릭 시 원본 이동</em></h2>
+<div class="shots">
+  <figure><a href="https://www.instagram.com/chairboysss/" target="_blank" rel="noopener"><img src="shots/01-chairboysss.png" alt="@chairboysss"><figcaption>🅐 참조 @chairboysss ↗</figcaption></a></figure>
+  <figure><a href="https://www.instagram.com/your_driving/" target="_blank" rel="noopener"><img src="shots/02-your-driving.png" alt="@your_driving"><figcaption>🅑 참조 @your_driving ↗</figcaption></a></figure>
+  <figure><a href="https://www.instagram.com/car.jin.nam/" target="_blank" rel="noopener"><img src="shots/03-car-jin-nam.png" alt="@car.jin.nam"><figcaption>🅒 참조 @car.jin.nam ↗</figcaption></a></figure>
+  <figure><a href="https://www.instagram.com/engineering_in_one/" target="_blank" rel="noopener"><img src="shots/04-engineering-in-one.png" alt="@engineering_in_one"><figcaption>🅓 참조 @engineering_in_one ↗</figcaption></a></figure>
+</div>
+<p class="note">※ 계정 4곳의 최근 게시물을 15개씩만, 요청 간 2.5초 간격을 두고 천천히 수집했다. 캡처 속 내 계정 정보는 ●●●●● 로 마스킹 처리함.</p>
 
 <footer>
   근거: 퀘스트 3 벤치마킹 분석 — @chairboysss / @your_driving / @car.jin.nam / @engineering_in_one 각 최근 게시물 15개, 총 60개 (2026-09-07 수집)<br>
