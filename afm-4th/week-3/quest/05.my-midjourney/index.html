@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHILL RENDER — 자동차 제품 이미지 생성기</title>
+<style>
+  :root{
+    --bg:#08090c; --panel:#101319; --panel2:#171b24; --line:#252b36;
+    --ink:#e9edf4; --sub:#7f8a9c; --accent:#5ac8fa; --accent2:#9be7ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);height:100vh;overflow:hidden;
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .app{display:grid;grid-template-columns:330px 1fr;height:100vh}
+
+  /* ── 좌: 컨트롤 ── */
+  aside{background:var(--panel);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;overflow-y:auto}
+  .brand{padding:18px;border-bottom:1px solid var(--line)}
+  .brand .logo{display:flex;align-items:center;gap:10px}
+  .brand .dot{width:32px;height:32px;border-radius:9px;flex:none;
+    background:linear-gradient(135deg,#2b5c7a,var(--accent));
+    display:flex;align-items:center;justify-content:center;font-size:16px}
+  .brand h1{margin:0;font-size:17px;letter-spacing:.01em}
+  .brand p{margin:3px 0 0;font-size:11px;color:var(--sub)}
+
+  .sec{padding:14px 18px;border-bottom:1px solid var(--line)}
+  .sec h2{margin:0 0 9px;font-size:11px;letter-spacing:.1em;color:var(--sub);
+    text-transform:uppercase;font-weight:700}
+
+  .styles{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .st{text-align:left;background:var(--panel2);border:1px solid var(--line);
+    color:var(--ink);border-radius:8px;padding:8px 9px;cursor:pointer;font:inherit;transition:.15s}
+  .st:hover{border-color:var(--accent)}
+  .st.on{border-color:var(--accent);background:#122430;box-shadow:0 0 0 1px var(--accent) inset}
+  .st b{display:block;font-size:12px;margin-bottom:2px}
+  .st span{color:var(--sub);font-size:10.5px;line-height:1.35;display:block}
+
+  label{display:block;font-size:11px;color:var(--sub);margin:10px 0 4px}
+  textarea,input,select{width:100%;background:var(--panel2);border:1px solid var(--line);
+    color:var(--ink);border-radius:8px;padding:8px 10px;font:inherit;font-size:12.5px;resize:vertical}
+  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--accent)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+  .drop{border:1.5px dashed var(--line);border-radius:10px;padding:14px 12px;
+    text-align:center;cursor:pointer;transition:.15s;background:var(--panel2)}
+  .drop:hover,.drop.over{border-color:var(--accent);background:#122430}
+  .drop .ic{font-size:22px;display:block;margin-bottom:4px}
+  .drop b{font-size:12px;display:block}
+  .drop span{font-size:10.5px;color:var(--sub)}
+  .ref{display:none;gap:9px;align-items:center;background:var(--panel2);
+    border:1px solid var(--accent);border-radius:10px;padding:8px}
+  .ref.on{display:flex}
+  .ref img{width:62px;height:62px;object-fit:cover;border-radius:7px;flex:none;background:#000}
+  .ref .meta{flex:1;min-width:0;font-size:11px}
+  .ref .meta b{display:block;font-size:11.5px;color:var(--accent)}
+  .ref .meta span{color:var(--sub);font-size:10.5px;word-break:break-all}
+  .ref button{background:transparent;border:1px solid var(--line);color:var(--sub);
+    border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer}
+  .ref button:hover{color:var(--ink);border-color:var(--sub)}
+  .range{-webkit-appearance:none;appearance:none;width:100%;height:5px;padding:0;
+    background:var(--line);border-radius:5px;border:none;margin-top:2px}
+  .range::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;
+    border-radius:50%;background:var(--accent);cursor:pointer}
+  .rangeLbl{display:flex;justify-content:space-between;font-size:10px;
+    color:var(--sub);margin-top:3px}
+  .badge{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;
+    background:var(--accent);color:#04121a;border-radius:20px;padding:1px 7px;margin-left:5px}
+
+  .btn{width:100%;border:none;border-radius:9px;padding:11px;font:inherit;
+    font-size:13px;font-weight:700;cursor:pointer;transition:.15s;
+    background:linear-gradient(135deg,#2b5c7a,var(--accent));color:#04121a}
+  .btn:hover{filter:brightness(1.1)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+  .hint{font-size:10.5px;color:var(--sub);margin-top:8px;line-height:1.5}
+  .promptview{margin-top:9px;background:#0b1016;border:1px solid var(--line);
+    border-radius:7px;padding:8px 9px;font-size:10.5px;color:var(--sub);
+    max-height:96px;overflow:auto;word-break:break-word}
+
+  /* ── 우: 갤러리 ── */
+  main{display:flex;flex-direction:column;min-width:0}
+  .top{padding:12px 22px;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center}
+  .top .t{font-size:13px;font-weight:700}
+  .stat{font-size:11px;color:var(--sub)}
+  .stat .ok{color:#3ddc97}
+  .stat .ng{color:#ff8b8b}
+
+  .gal{flex:1;overflow-y:auto;padding:20px 22px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;cursor:zoom-in;background:#000}
+  .card .cap{padding:9px 11px;font-size:11.5px}
+  .card .cap .s{color:var(--accent);font-size:10.5px;font-weight:700}
+  .card .cap .p{color:var(--sub);font-size:10.5px;margin-top:3px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .cap a{color:var(--sub);font-size:10.5px;text-decoration:none;
+    display:inline-block;margin-top:6px;border:1px solid var(--line);
+    border-radius:5px;padding:3px 8px}
+  .card .cap a:hover{color:var(--ink);border-color:var(--sub)}
+  .card .cap .acts{display:flex;gap:6px;margin-top:6px;align-items:center}
+  .card .cap .acts a{margin-top:0}
+  .del{background:transparent;border:1px solid var(--line);color:var(--sub);
+    border-radius:5px;padding:3px 8px;font-size:10.5px;cursor:pointer;font-family:inherit}
+  .del:hover{color:#ff9b9b;border-color:#8a3b3b}
+  .clearAll{background:transparent;border:1px solid var(--line);color:var(--sub);
+    border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;
+    margin-left:10px}
+  .clearAll:hover{color:#ff9b9b;border-color:#8a3b3b}
+
+  .empty{height:100%;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;color:var(--sub);text-align:center;gap:6px}
+  .empty .big{font-size:44px}
+
+  .skel{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    color:var(--sub);font-size:12px;animation:p 1.4s ease-in-out infinite}
+  @keyframes p{0%,100%{opacity:.45}50%{opacity:.9}}
+
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;
+    align-items:center;justify-content:center;z-index:50;padding:30px}
+  .lb.on{display:flex}
+  .lb img{max-width:100%;max-height:100%;border-radius:10px}
+
+  @media (max-width:860px){
+    .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+    aside{max-height:48vh}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside>
+    <div class="brand">
+      <div class="logo">
+        <div class="dot">❄️</div>
+        <div><h1>CHILL RENDER</h1><p>자동차 제품 이미지 · 3D 렌더 스타일</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>화풍 프리셋</h2>
+      <div class="styles" id="styles"></div>
+      <div id="customWrap" style="display:none">
+        <label>커스텀 스타일 지시문</label>
+        <textarea id="customStyle" rows="3" placeholder="예: cinematic neon reflections, wet asphalt, night city"></textarea>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>참조 이미지 <span style="text-transform:none;letter-spacing:0">(선택)</span></h2>
+      <div class="drop" id="drop">
+        <span class="ic">📷</span>
+        <b>제품 사진 업로드</b>
+        <span>클릭 또는 드래그 · PNG/JPG</span>
+      </div>
+      <div class="ref" id="ref">
+        <img id="refImg" alt="참조 이미지">
+        <div class="meta"><b>리스타일 모드</b><span id="refName"></span></div>
+        <button id="refClear">제거</button>
+      </div>
+      <input type="file" id="file" accept="image/png,image/jpeg,image/webp" hidden>
+      <div id="strWrap" style="display:none">
+        <label>화풍 적용 강도 <b id="strVal" style="color:var(--accent)">0.60</b></label>
+        <input type="range" id="strength" min="0.2" max="0.9" step="0.05" value="0.6" class="range">
+        <div class="rangeLbl"><span>원본 유지</span><span>화풍 강하게</span></div>
+      </div>
+      <p class="hint">사진을 올리면 <b>그 제품의 형태를 유지한 채</b> 선택한 화풍으로 다시 렌더링합니다.
+      강도를 올릴수록 화풍이 세지고, 너무 높이면 형태가 달라집니다.</p>
+    </div>
+
+    <div class="sec">
+      <h2>제품 설명</h2>
+      <textarea id="subject" rows="3" placeholder="예: 차량용 마그네틱 휴대폰 거치대, 원형 메탈 헤드, 송풍구 클립형"></textarea>
+      <div class="row">
+        <div>
+          <label>비율</label>
+          <select id="size">
+            <option value="1024x1024">정사각 1:1</option>
+            <option value="1536x1024">가로 3:2</option>
+            <option value="1024x1536">세로 2:3</option>
+          </select>
+        </div>
+        <div>
+          <label>장수</label>
+          <select id="n"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        </div>
+      </div>
+      <label>품질</label>
+      <select id="quality">
+        <option value="low">낮음 (빠름·저렴)</option>
+        <option value="medium" selected>보통</option>
+        <option value="high">높음 (느림)</option>
+      </select>
+      <div class="promptview" id="promptview"></div>
+      <p class="hint">스타일 지시문은 자동으로 뒤에 붙습니다. 제품 설명만 쓰면 됩니다.</p>
+    </div>
+
+    <div class="sec" style="border:none">
+      <button class="btn" id="go">이미지 생성</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="top">
+      <div class="t">갤러리 <button class="clearAll" id="clearAll">전체 지우기</button></div>
+      <div class="stat" id="stat">연결 확인 중…</div>
+    </div>
+    <div class="gal" id="gal"></div>
+  </main>
+</div>
+
+<div class="lb" id="lb"><img id="lbImg" alt="확대 이미지"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let STYLES = {}, current = 'studio_black', busy = false;
+
+// ── 스타일 로드 ──
+fetch('/api/styles').then(r=>r.json()).then(j=>{
+  STYLES = j.data;
+  const wrap = $('styles');
+  Object.entries(STYLES).forEach(([k,v])=>{
+    const b=document.createElement('button');
+    b.className='st'+(k===current?' on':''); b.dataset.k=k;
+    b.innerHTML='<b>'+v.label+'</b><span>'+v.desc+'</span>';
+    b.onclick=()=>pick(k);
+    wrap.appendChild(b);
+  });
+  const c=document.createElement('button');
+  c.className='st'; c.dataset.k='custom';
+  c.innerHTML='<b>커스텀</b><span>직접 지시문 작성</span>';
+  c.onclick=()=>pick('custom');
+  wrap.appendChild(c);
+  renderPrompt();
+});
+
+function pick(k){
+  current=k;
+  document.querySelectorAll('.st').forEach(b=>b.classList.toggle('on', b.dataset.k===k));
+  $('customWrap').style.display = k==='custom' ? 'block' : 'none';
+  renderPrompt();
+}
+function styleSuffix(){
+  return current==='custom' ? $('customStyle').value.trim() : (STYLES[current]?.suffix || '');
+}
+function renderPrompt(){
+  const s=$('subject').value.trim() || '(제품 설명)';
+  const mode = (typeof refData!=='undefined' && refData) ? '[리스타일] ' : '';
+  $('promptview').textContent = mode + '최종 프롬프트 ▸ ' + [s, styleSuffix()].filter(Boolean).join(', ');
+}
+['subject','customStyle'].forEach(id=>$(id).addEventListener('input', renderPrompt));
+
+// ── 갤러리 ──
+function card(entry, url){
+  const label = entry.style==='custom' ? '커스텀' : (STYLES[entry.style]?.label || entry.style);
+  const d=document.createElement('div');
+  d.className='card';
+  const badge = entry.mode==='edit' ? '<span class="badge">리스타일 '+(entry.strength||'').toString().slice(0,4)+'</span>' : '';
+  d.innerHTML = '<img src="'+url+'" alt="'+entry.subject+'">'
+    + '<div class="cap"><div class="s">'+label+badge+'</div>'
+    + '<div class="p">'+entry.subject+'</div>'
+    + '<div class="acts"><a href="'+url+'" download>다운로드</a>'
+    + '<button class="del">삭제</button></div></div>';
+  d.querySelector('img').onclick=()=>{ $('lbImg').src=url; $('lb').classList.add('on'); };
+  d.querySelector('.del').onclick=async ()=>{
+    const btn=d.querySelector('.del'); btn.disabled=true; btn.textContent='삭제 중…';
+    try{
+      const r=await fetch('/api/delete',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({file:url})});
+      const j=await r.json();
+      if(j.success){ d.remove(); if(grid && !grid.children.length) showEmpty(); }
+      else { alert('삭제 실패: '+(j.message||'')); btn.disabled=false; btn.textContent='삭제'; }
+    }catch(e){ alert('삭제 실패: '+e.message); btn.disabled=false; btn.textContent='삭제'; }
+  };
+  return d;
+}
+$('lb').onclick=()=>$('lb').classList.remove('on');
+
+function showEmpty(){
+  $('gal').innerHTML='<div class="empty"><div class="big">❄️</div>'
+    +'<div>왼쪽에서 화풍을 고르고 제품 설명을 입력하세요.</div>'
+    +'<div style="font-size:11.5px">무광 블랙 스튜디오 톤이 기본값입니다.</div></div>';
+}
+showEmpty();
+
+let grid=null;
+function ensureGrid(){
+  if(!grid || !grid.isConnected){
+    $('gal').innerHTML=''; grid=document.createElement('div'); grid.className='grid';
+    $('gal').appendChild(grid);
+  }
+  return grid;
+}
+
+// ── 참조 이미지 업로드 ──
+let refData = null;
+const drop = $('drop'), file = $('file');
+
+function setRef(f){
+  if(!f) return;
+  if(f.size > 12*1024*1024){ alert('12MB 이하 이미지를 올려주세요.'); return; }
+  const fr = new FileReader();
+  fr.onload = ()=>{
+    refData = fr.result;
+    $('refImg').src = refData;
+    $('refName').textContent = f.name;
+    $('ref').classList.add('on');
+    $('strWrap').style.display = 'block';
+    drop.style.display = 'none';
+    $('go').textContent = '리스타일 생성';
+    renderPrompt();
+  };
+  fr.readAsDataURL(f);
+}
+drop.onclick = ()=>file.click();
+file.onchange = e=>setRef(e.target.files[0]);
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{
+  e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{
+  e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e=>setRef(e.dataTransfer.files[0]));
+$('strength').addEventListener('input', ()=>{ $('strVal').textContent = Number($('strength').value).toFixed(2); });
+$('refClear').onclick = ()=>{
+  refData = null; file.value='';
+  $('ref').classList.remove('on'); $('strWrap').style.display='none'; drop.style.display='block';
+  $('go').textContent = '이미지 생성';
+  renderPrompt();
+};
+
+// ── 생성 ──
+$('go').onclick = async ()=>{
+  const subject=$('subject').value.trim();
+  if(!subject){ $('subject').focus(); return; }
+  if(busy) return;
+  busy=true; $('go').disabled=true; $('go').textContent='생성 중…';
+
+  const n=parseInt($('n').value,10);
+  const g=ensureGrid();
+  const skels=[];
+  for(let i=0;i<n;i++){
+    const s=document.createElement('div'); s.className='skel'; s.textContent = refData ? '리스타일 중…' : '렌더링 중…';
+    g.prepend(s); skels.push(s);
+  }
+
+  try{
+    const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({subject, style:current, customStyle:$('customStyle').value,
+        size:$('size').value, n, quality:$('quality').value, image:refData, strength:parseFloat($('strength').value)})});
+    const j=await r.json();
+    skels.forEach(s=>s.remove());
+    if(j.success){ j.data.files.slice().reverse().forEach(u=>g.prepend(card(j.data,u))); }
+    else alert('생성 실패\n\n'+(j.message||'알 수 없는 오류'));
+  }catch(e){
+    skels.forEach(s=>s.remove());
+    alert('서버 연결 실패: '+e.message);
+  }finally{
+    busy=false; $('go').disabled=false; $('go').textContent='이미지 생성';
+    if(!g.children.length) showEmpty();
+  }
+};
+
+$('clearAll').onclick = async ()=>{
+  if(!grid || !grid.children.length) return;
+  if(!confirm('갤러리의 모든 이미지를 삭제할까요? 파일도 함께 지워집니다.')) return;
+  try{
+    const r=await fetch('/api/clear',{method:'POST'});
+    const j=await r.json();
+    if(j.success) showEmpty(); else alert('삭제 실패: '+(j.message||''));
+  }catch(e){ alert('삭제 실패: '+e.message); }
+};
+
+// ── 상태 ──
+fetch('/api/health').then(r=>r.json()).then(j=>{
+  const d=j.data||{};
+  $('stat').innerHTML = d.hasKey
+    ? '<span class="ok">● '+d.provider+'</span> · '+d.model
+    : '<span class="ng">● 키 없음</span>';
+}).catch(()=>$('stat').textContent='서버 응답 없음');
+</script>
+</body>
+</html>
