@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COIN PULSE — 실시간 코인 시세 대시보드</title>
+<style>
+  :root{
+    --bg:#0a0c10; --panel:#141821; --panel2:#1c212c; --line:#272e3b;
+    --ink:#e9edf4; --sub:#828d9f; --accent:#f7b955;
+    --up:#26d07c; --down:#ff5c5c;
+    --upbg:rgba(38,208,124,.12); --downbg:rgba(255,92,92,.12);
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6f9; --panel:#fff; --panel2:#eef1f6; --line:#dde2ea;
+    --ink:#161a21; --sub:#67707f; --accent:#c98a12;
+    --upbg:rgba(38,160,100,.12); --downbg:rgba(220,60,60,.10);
+    --up:#12a05e; --down:#dc3c3c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);min-height:100vh;
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;
+    transition:background .2s,color .2s}
+  .wrap{max-width:1120px;margin:0 auto;padding:22px 20px 60px}
+
+  /* ── 헤더 ── */
+  header{display:flex;justify-content:space-between;align-items:center;
+    gap:16px;flex-wrap:wrap;margin-bottom:20px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .dot{width:36px;height:36px;border-radius:11px;flex:none;
+    background:linear-gradient(135deg,var(--accent),#ff7a3d);
+    display:flex;align-items:center;justify-content:center;font-size:18px}
+  .brand h1{margin:0;font-size:19px;letter-spacing:-.01em}
+  .brand p{margin:1px 0 0;font-size:11.5px;color:var(--sub)}
+  .hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .live{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--sub);
+    background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:5px 11px}
+  .pulse{width:7px;height:7px;border-radius:50%;background:var(--up);
+    animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(38,208,124,.5)}
+    50%{opacity:.55;box-shadow:0 0 0 5px rgba(38,208,124,0)}}
+  .iconbtn{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:15px;
+    display:flex;align-items:center;justify-content:center;font-family:inherit}
+  .iconbtn:hover{border-color:var(--accent)}
+  .iconbtn.spin{animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  select.cur{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    border-radius:9px;padding:7px 9px;font:inherit;font-size:12.5px;cursor:pointer}
+
+  /* ── 검색 ── */
+  .searchbox{position:relative;margin-bottom:18px}
+  .searchbox input{width:100%;background:var(--panel);border:1px solid var(--line);
+    color:var(--ink);border-radius:11px;padding:12px 14px 12px 40px;font:inherit;font-size:13.5px}
+  .searchbox input:focus{outline:none;border-color:var(--accent)}
+  .searchbox .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--sub);font-size:14px}
+  .results{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:20;
+    background:var(--panel);border:1px solid var(--line);border-radius:11px;
+    overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.35);display:none}
+  .results.on{display:block}
+  .ritem{display:flex;align-items:center;gap:10px;padding:9px 13px;cursor:pointer;
+    border-bottom:1px solid var(--line)}
+  .ritem:last-child{border-bottom:none}
+  .ritem:hover{background:var(--panel2)}
+  .ritem img{width:22px;height:22px;border-radius:50%;flex:none;background:var(--panel2)}
+  .ritem b{font-size:13px}
+  .ritem .sym{color:var(--sub);font-size:11.5px;text-transform:uppercase}
+  .ritem .rank{margin-left:auto;font-size:11px;color:var(--sub)}
+  .ritem.added{opacity:.45;cursor:default}
+
+  /* ── 카드 ── */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:16px 17px;position:relative;overflow:hidden;transition:.2s}
+  .card::before{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:var(--sub)}
+  .card.up::before{background:var(--up)}
+  .card.down::before{background:var(--down)}
+  .card:hover{border-color:var(--sub)}
+  .card.flash-up{animation:fu .9s ease-out}
+  .card.flash-down{animation:fd .9s ease-out}
+  @keyframes fu{0%{background:var(--upbg)}100%{background:var(--panel)}}
+  @keyframes fd{0%{background:var(--downbg)}100%{background:var(--panel)}}
+
+  .ctop{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .ctop img{width:28px;height:28px;border-radius:50%;flex:none;background:var(--panel2)}
+  .ctop .nm{min-width:0}
+  .ctop .nm b{display:block;font-size:14px;line-height:1.3;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ctop .nm span{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.04em}
+  .rm{margin-left:auto;background:transparent;border:none;color:var(--sub);
+    cursor:pointer;font-size:15px;line-height:1;padding:2px 4px;border-radius:5px;font-family:inherit}
+  .rm:hover{color:var(--down);background:var(--downbg)}
+
+  .price{font-size:23px;font-weight:800;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;transition:color .3s}
+  .price .unit{font-size:13px;font-weight:600;color:var(--sub);margin-left:3px}
+  .chg{display:inline-flex;align-items:center;gap:4px;margin-top:7px;
+    font-size:13px;font-weight:700;border-radius:7px;padding:3px 9px;
+    font-variant-numeric:tabular-nums}
+  .chg.up{color:var(--up);background:var(--upbg)}
+  .chg.down{color:var(--down);background:var(--downbg)}
+  .sub2{margin-top:11px;padding-top:10px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;font-size:11px;color:var(--sub)}
+  .sub2 b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+  .empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--sub)}
+  .empty .big{font-size:42px;margin-bottom:10px}
+  .skel{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    height:150px;animation:sk 1.4s ease-in-out infinite}
+  @keyframes sk{0%,100%{opacity:.4}50%{opacity:.75}}
+
+  .foot{margin-top:22px;font-size:11.5px;color:var(--sub);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .err{background:var(--downbg);border:1px solid var(--down);color:var(--down);
+    border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:14px;display:none}
+  .err.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="dot">📈</div>
+      <div>
+        <h1>COIN PULSE</h1>
+        <p>실시간 코인 시세 대시보드 · CoinGecko</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="live"><span class="pulse"></span><span id="countdown">30초 후 갱신</span></div>
+      <select class="cur" id="cur">
+        <option value="krw">KRW ₩</option>
+        <option value="usd">USD $</option>
+      </select>
+      <button class="iconbtn" id="refresh" title="새로고침">↻</button>
+      <button class="iconbtn" id="theme" title="테마 전환">🌙</button>
+    </div>
+  </header>
+
+  <div class="err" id="err"></div>
+
+  <div class="searchbox">
+    <span class="ic">🔍</span>
+    <input id="search" placeholder="코인 검색해서 추가 (예: dogecoin, 도지, ADA)" autocomplete="off">
+    <div class="results" id="results"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    <span id="updated">—</span>
+    <span>데이터: CoinGecko · 30초 자동 갱신 · 관심 코인은 브라우저에 저장됩니다</span>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const DEFAULTS = ['bitcoin', 'ethereum', 'ripple', 'solana'];
+const KEY = 'coinpulse.ids';
+const CUR_KEY = 'coinpulse.cur';
+const THEME_KEY = 'coinpulse.theme';
+const INTERVAL = 30;
+
+let ids = load(KEY, DEFAULTS);
+let vs = load(CUR_KEY, 'krw');
+let meta = {};          // id -> {name, symbol, image}
+let prev = {};          // id -> 직전 가격 (변동 감지용)
+let left = INTERVAL;
+let timer = null;
+
+function load(k, def){
+  try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; }
+  catch{ return def; }
+}
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} }
+
+// ── 테마 ──
+(function initTheme(){
+  const t = load(THEME_KEY, 'dark');
+  if(t === 'light') document.documentElement.setAttribute('data-theme','light');
+  $('theme').textContent = t === 'light' ? '☀️' : '🌙';
+})();
+$('theme').onclick = ()=>{
+  const now = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  if(now === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+  $('theme').textContent = now === 'light' ? '☀️' : '🌙';
+  save(THEME_KEY, now);
+};
+
+// ── 통화 ──
+$('cur').value = vs;
+$('cur').onchange = ()=>{ vs = $('cur').value; save(CUR_KEY, vs); prev = {}; refresh(true); };
+
+// ── 포맷 ──
+function fmtPrice(v){
+  if(v == null) return '—';
+  if(vs === 'krw'){
+    if(v >= 1000) return Math.round(v).toLocaleString('ko-KR');
+    if(v >= 1) return v.toFixed(2);
+    return v.toFixed(4);
+  }
+  if(v >= 1000) return v.toLocaleString('en-US',{maximumFractionDigits:0});
+  if(v >= 1) return v.toFixed(2);
+  return v.toFixed(5);
+}
+function fmtCap(v){
+  if(v == null) return '—';
+  if(vs === 'krw'){
+    if(v >= 1e12) return (v/1e12).toFixed(1)+'조';
+    if(v >= 1e8) return (v/1e8).toFixed(0)+'억';
+    return Math.round(v).toLocaleString('ko-KR');
+  }
+  if(v >= 1e12) return (v/1e12).toFixed(2)+'T';
+  if(v >= 1e9) return (v/1e9).toFixed(1)+'B';
+  return (v/1e6).toFixed(0)+'M';
+}
+const unit = ()=> vs === 'krw' ? '원' : '$';
+
+// ── 렌더 ──
+function skeletons(){
+  $('grid').innerHTML = ids.map(()=>'<div class="skel"></div>').join('') || '';
+}
+
+function render(prices){
+  const g = $('grid');
+  if(!ids.length){
+    g.innerHTML = '<div class="empty"><div class="big">🪙</div>'
+      + '<div>관심 코인이 없습니다. 위에서 검색해 추가하세요.</div></div>';
+    return;
+  }
+  g.innerHTML = '';
+  ids.forEach(id=>{
+    const p = prices[id] || {};
+    const price = p[vs];
+    const chg = p[vs+'_24h_change'];
+    const cap = p[vs+'_market_cap'];
+    const vol = p[vs+'_24h_vol'];
+    const m = meta[id] || {};
+    const dir = chg == null ? '' : (chg >= 0 ? 'up' : 'down');
+
+    const d = document.createElement('div');
+    d.className = 'card ' + dir;
+    d.dataset.id = id;
+    d.innerHTML =
+      '<div class="ctop">'
+      + (m.image ? '<img src="'+m.image+'" alt="">' : '<img alt="">')
+      + '<div class="nm"><b>'+(m.name||id)+'</b><span>'+(m.symbol||'')+'</span></div>'
+      + '<button class="rm" title="삭제">✕</button></div>'
+      + '<div class="price">'+fmtPrice(price)+'<span class="unit">'+unit()+'</span></div>'
+      + (chg == null ? ''
+         : '<div class="chg '+dir+'">'+(chg>=0?'▲':'▼')+' '+Math.abs(chg).toFixed(2)+'%</div>')
+      + '<div class="sub2"><span>시총 <b>'+fmtCap(cap)+'</b></span>'
+      + '<span>24h 거래대금 <b>'+fmtCap(vol)+'</b></span></div>';
+
+    d.querySelector('.rm').onclick = ()=>{
+      ids = ids.filter(x=>x!==id); save(KEY, ids); refresh(true);
+    };
+
+    // 가격 변동 플래시
+    const before = prev[id];
+    if(before != null && price != null && before !== price){
+      d.classList.add(price > before ? 'flash-up' : 'flash-down');
+    }
+    prev[id] = price;
+    g.appendChild(d);
+  });
+}
+
+// ── 데이터 ──
+async function fetchMeta(list){
+  const need = list.filter(id=>!meta[id]);
+  if(!need.length) return;
+  try{
+    const r = await fetch('/api/coins?ids='+need.join(','));
+    const j = await r.json();
+    if(j.success) j.data.forEach(c=>{ meta[c.id]=c; });
+  }catch{}
+}
+
+async function refresh(showSkel){
+  if(!ids.length){ render({}); return; }
+  if(showSkel) skeletons();
+  $('refresh').classList.add('spin');
+  try{
+    await fetchMeta(ids);
+    const r = await fetch('/api/prices?ids='+ids.join(',')+'&vs='+vs);
+    const j = await r.json();
+    if(!j.success) throw new Error(j.message||'조회 실패');
+    render(j.data);
+    $('err').classList.remove('on');
+    const t = new Date();
+    $('updated').textContent = '마지막 갱신 ' + t.toLocaleTimeString('ko-KR')
+      + (j.meta && j.meta.cached ? ' (캐시)' : '');
+  }catch(e){
+    $('err').textContent = '⚠️ ' + e.message;
+    $('err').classList.add('on');
+  }finally{
+    $('refresh').classList.remove('spin');
+    left = INTERVAL;
+  }
+}
+
+$('refresh').onclick = ()=>refresh(false);
+
+// ── 자동 갱신 ──
+function tick(){
+  left--;
+  $('countdown').textContent = left > 0 ? left+'초 후 갱신' : '갱신 중…';
+  if(left <= 0) refresh(false);
+}
+timer = setInterval(tick, 1000);
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden && left <= 0) refresh(false);
+});
+
+// ── 검색 ──
+let searchTimer = null;
+$('search').addEventListener('input', ()=>{
+  clearTimeout(searchTimer);
+  const q = $('search').value.trim();
+  if(q.length < 2){ $('results').classList.remove('on'); return; }
+  searchTimer = setTimeout(async ()=>{
+    try{
+      const r = await fetch('/api/search?q='+encodeURIComponent(q));
+      const j = await r.json();
+      if(!j.success) return;
+      const box = $('results');
+      box.innerHTML = j.data.map(c=>{
+        const added = ids.includes(c.id);
+        return '<div class="ritem'+(added?' added':'')+'" data-id="'+c.id+'">'
+          + '<img src="'+(c.image||'')+'" alt="">'
+          + '<div><b>'+c.name+'</b> <span class="sym">'+c.symbol+'</span></div>'
+          + '<span class="rank">'+(added?'추가됨':(c.rank?'#'+c.rank:''))+'</span></div>';
+      }).join('') || '<div class="ritem">결과 없음</div>';
+      box.classList.add('on');
+      box.querySelectorAll('.ritem[data-id]').forEach(el=>{
+        el.onclick = ()=>{
+          const id = el.dataset.id;
+          if(ids.includes(id)) return;
+          ids.push(id); save(KEY, ids);
+          $('search').value=''; box.classList.remove('on');
+          refresh(true);
+        };
+      });
+    }catch{}
+  }, 350);
+});
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.searchbox')) $('results').classList.remove('on');
+});
+
+// ── 시작 ──
+refresh(true);
+</script>
+</body>
+</html>
