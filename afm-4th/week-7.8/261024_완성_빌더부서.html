@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>빌더 부서 v1 완성</title>
+<style>
+body{margin:0;background:#9a9a9a;font-family:"맑은 고딕","Malgun Gothic",sans-serif;color:#111}
+.slide{width:1280px;height:720px;margin:24px auto;background:#fff;box-sizing:border-box;padding:30px 46px;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+h1{font-size:26px;margin:0 0 4px;border-bottom:3px solid #333;padding-bottom:6px}
+.sub{font-size:16px;font-weight:bold;margin:12px 0 6px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:#d9d9d9;border:1px solid #777;padding:6px 8px;text-align:center}
+td{border:1px solid #777;padding:6px 8px;vertical-align:top;line-height:1.4}
+td.c{text-align:center;font-weight:bold}
+.note{font-size:12.5px;color:#444;margin-top:8px;line-height:1.6}
+.pg{position:absolute;right:30px;bottom:14px;font-size:12px;color:#666}
+.box{border:2px solid #333;padding:6px 10px;text-align:center;font-weight:bold;display:inline-block;min-width:150px;background:#f2f2f2;font-size:14px}
+.org{text-align:center;margin:8px 0 4px;line-height:1.5}
+pre{background:#f4f4f4;border:1px solid #999;padding:8px 10px;font-size:12.5px;line-height:1.45;margin:4px 0}
+.red{color:#c00;font-weight:bold}.two{display:flex;gap:16px}.two>div{flex:1}
+</style></head><body>
+
+<div class="slide">
+<h1>① 무엇을 만들었나 — MT액세서리 빌더 부서 (에이전트 팀 v1)</h1>
+<div class="org">
+<div class="box">팀장님 (판정)</div><br>│<br>
+<div class="box">비서실 = AGENTS.md (메인)<br><span style="font-weight:normal;font-size:12px">라우팅 · 아침 브리핑 · 3줄 요약</span></div><br>
+┌──────────┬──────────┼──────────┬──────────┐<br>
+<div class="box">시장조사담당<br>기획</div>&nbsp;
+<div class="box">원가담당<br>C</div>&nbsp;
+<div class="box">품질인증담당<br>Q</div>&nbsp;
+<div class="box">입고일정담당<br>D ⏰ 매주 월 09:00</div>
+</div>
+<div class="sub">■ 테슬라 모델 Y 2품목을 기획 → 원가 → 품질 → 입고 로 1회전</div>
+<table>
+<tr><th style="width:9%">코드</th><th style="width:26%">품목</th><th style="width:25%">길</th><th>왜 이 길인가 (시장 빈틈)</th></tr>
+<tr><td class="c">SG-01</td><td>선글라스 트레이 (주니퍼 전용)</td><td><b>제품</b> · 직접 커스텀 제작 (금형)</td><td>리뷰 불만 1위 "세대 안 맞음" + 안감 없어 렌즈 긁힘 → 치수·구조 빈틈은 완제품으로 못 메움</td></tr>
+<tr><td class="c">TS-02</td><td>트렁크 사이드 보관함 좌우+커버</td><td><b>상품</b> · 완제품 소싱, 패키지만 자사</td><td>불만 = "커버 없음·구형만 됨" → 완제품+커버+세대 표기 패키지로 메움, 스피드(D) 확보</td></tr>
+</table>
+<div class="note">※ 판단축: 메이튼 = 스피드(D) 강점 · Q·C 약점 → 모든 옵션에 "D를 지키며 Q·C를 올리는가" 표기 · 숫자는 QCD + 영업이익/개<br>※ 상호·공급사·금액 전부 가상값 (공개 저장소)</div>
+<div class="pg">1 / 5</div>
+</div>
+
+<div class="slide">
+<h1>② 담당자 4명 — 무엇을 받고 무엇을 내놓나</h1>
+<table>
+<tr><th style="width:12%">담당</th><th style="width:22%">읽는 자료 (읽기만)</th><th style="width:16%">계산</th><th style="width:28%">산출물 (서식)</th><th>안 하는 일</th></tr>
+<tr><td class="c">시장조사담당</td><td>자료/시장/ 리스팅 10 · 리뷰 22</td><td>market.ps1</td><td>기획검토표: 수요·빈틈(원문 인용)·제품/상품 길·<b>판가 상한</b>·옵션</td><td>품목·판가 확정</td></tr>
+<tr><td class="c">원가담당</td><td>자료/원가/ 견적 3곳×2 + 판가 상한</td><td>cost.ps1</td><td>원가검토표: 허용원가·랜딩원가(금형 상각/패키지비)·옵션 3종(수량↑·판가↑·스펙↓)</td><td>단가 회신·발주</td></tr>
+<tr><td class="c">품질인증담당</td><td>자료/품질/ 골든샘플 3개 · 입고검사 20개 · 인증요건</td><td>quality.ps1</td><td>검수보고서: 판정 후보(합격/조건부/재샘플 · 입고/보류)·로고·세대·표기 체크·수정 지시 초안</td><td>합격 확정·시험 신청</td></tr>
+<tr><td class="c">입고일정담당 ⏰</td><td>자료/입고/ 금주·전주 관리표</td><td>inbound.ps1</td><td>입고점검표: 🔴지연/🟡변동/⚪확인 · 7일 내 통보 대상 · 패키지↔상품 짝</td><td>ERP 수정·독촉 발송</td></tr>
+</table>
+<div class="sub">■ 실제 돌려본 숫자 (스크립트 검증 완료)</div>
+<table>
+<tr><th>SG-01 원가</th><th>TS-02 입고검사</th><th>2643주 입고점검</th><th>SG-01 T1 골든샘플</th></tr>
+<tr><td>판가 상한 24,900 → 허용원가 6,791<br>A101 13,663(60%) · A205 10,309 · A777 9,029<br><span class="red">전부 초과</span> → 수량 8,521개 또는 판가 43,900 필요</td><td>샘플 20: 치명 0 · 중 1 · 경 3<br><span class="red">보류</span> (경결함 허용 2 초과) → 업체 통보 초안</td><td>9건 중 🔴지연 2 (T1 샘플 +6일 · 무선충전 커버 +7일)<br>통보 대상 4 · 패키지 짝 🟢 여유 2일</td><td>폭 W ✗(73.4) · 진동 덜컹 ✗(2회)<br><span class="red">재샘플</span> → T2 수정 지시 초안</td></tr>
+</table>
+<div class="pg">2 / 5</div>
+</div>
+
+<div class="slide">
+<h1>③ 폴더 — 수업 틀(총무 kit + 하루 kit) 그대로</h1>
+<div class="two"><div>
+<pre>final-agent-team/
+├ CLAUDE.md        첫 줄 "MEMORY.md 먼저 읽는다" + @AGENTS.md
+├ AGENTS.md        비서실(메인) · 라우팅 표 · 브리핑 4블록
+├ MEMORY.md        팀 공용 기억 — 규칙·예외만 (날짜순)
+├ me.md            팀장님·회사·품목·부서 표
+├ 업무규칙.md       공통 9 + 시장조사·원가·입고·품질 규칙
+├ .claude/agents/  담당 4명 (7칸 틀 · description에 MUST)
+├ agent-memory/    담당별 MEMORY — 배움 · [ ] 날짜 다음 할 일
+├ memory/팩트시트.md 환율·관세·물류·패키지·원가율·세대 구분
+├ 자료/ 시장·원가·입고·품질   (읽기만 · 가상)
+├ 받은요청/ 01~06  → 완료문서/ (서식 4종 채움)
+├ 서식/ 기획검토표·원가검토표·입고점검표·검수보고서
+├ scripts/ market·cost·inbound·quality .ps1
+│          weekly_inbound.ps1 (예약) · register_task.ps1
+├ 로그/ 예약실행.log
+└ README.md (실행 순서 · 안전장치 · 회고)</pre>
+</div><div>
+<div class="sub">■ 안전장치</div>
+<table>
+<tr><th style="width:30%">구분</th><th>내용</th></tr>
+<tr><td class="c">읽기 전용</td><td>ERP·시트는 읽기만. 자료/ 사본만 사용</td></tr>
+<tr><td class="c">사람 몫</td><td>발송·상신·확정·발주 = 팀장님</td></tr>
+<tr><td class="c">숫자</td><td>scripts 결과만. 암산·추정 금지</td></tr>
+<tr><td class="c">테슬라</td><td>로고·"정품" 금지 · 세대(구형/주니퍼/Y L) 표기 필수</td></tr>
+<tr><td class="c">예약 멈춤</td><td>이번 주 자료 없으면 멈춤 · 같은 날 2회 금지 · 40턴/15분</td></tr>
+</table>
+<div class="sub">■ 숙제 요건 대응</div>
+<table>
+<tr><th>장면</th><th>어디서</th></tr>
+<tr><td class="c">자동 위임</td><td>AGENTS.md 라우팅 + 4명 description(트리거+MUST)</td></tr>
+<tr><td class="c">기억</td><td>CLAUDE.md 첫 줄 + MEMORY.md + agent-memory 4개</td></tr>
+<tr><td class="c">예약 실행</td><td>register_task.ps1 → 월 09:00 · 로그/예약실행.log</td></tr>
+</table>
+</div></div>
+<div class="pg">3 / 5</div>
+</div>
+
+<div class="slide">
+<h1>④ 발표 시연 — 이 폴더를 VS Code로 열고 그대로 입력</h1>
+<div class="sub">■ 0. 열기 (상위 폴더에서 열면 담당자를 못 봄)</div>
+<pre>VS Code → File → Open Folder → ...\afm-4th\week-7.8\final-agent-team → 신뢰 → Claude 아이콘</pre>
+<div class="sub">■ 1. 자동 위임 (이름 안 부름) — 스크린샷 ①②③</div>
+<pre>받은요청 폴더에 있는 거 다 처리해줘</pre>
+<div class="note">→ 시장조사·원가·품질인증·입고일정 4명이 동시에 서브 에이전트로 돌고(하단 초록 표시), 완료문서/ 에 6개 생김. 단건: <b>모델Y 선글라스 트레이 시장 빈틈 뭐야</b> / <b>TS-02 견적 3곳 원가 봐줘</b> / <b>SG-01 T1 샘플 판정</b> / <b>이번 주 들어오는 거 정리</b></div>
+<div class="sub">■ 2. 기억 — /clear 후</div>
+<pre>/clear
+TS-02 원가</pre>
+<div class="note">→ 설명 없이도 금형 상각 규칙·패키지비·세대 표기·로고 금지가 반영됨 (MEMORY.md + agent-memory/원가담당)</div>
+<div class="sub">■ 3. 예약 실행 1회 + 로그</div>
+<pre>powershell -ExecutionPolicy Bypass -File scripts/register_task.ps1
+schtasks /Run /TN MT빌더_입고점검_주간
+Get-Content 로그/예약실행.log</pre>
+<div class="sub">■ 4. 브리핑</div>
+<pre>브리핑</pre>
+<div class="pg">4 / 5</div>
+</div>
+
+<div class="slide">
+<h1>⑤ 제출 상태 · 회고</h1>
+<table>
+<tr><th style="width:22%">항목</th><th style="width:14%">상태</th><th>비고</th></tr>
+<tr><td class="c">폴더·담당 4·MEMORY·서식·자료·스크립트</td><td class="c">✅</td><td>스크립트 4종 실행 검증 완료</td></tr>
+<tr><td class="c">git 커밋</td><td class="c">✅ 1e0f237</td><td>.env · 카톡 원문 · 오디오 · 강의 전사 = .gitignore로 제외 확인</td></tr>
+<tr><td class="c">GitHub push</td><td class="c">⏳</td><td>별도 창에서 GitHub 로그인 승인 → 완료 후 강의실 카드 URL 등록 (github.com/joopang1317/afm-4th)</td></tr>
+<tr><td class="c">위임 화면 3장 · 결과물 · 예약 로그</td><td class="c">⏳</td><td>④ 순서대로 VS Code에서 실행 → 스크린샷 → 커밋·push 1회 더</td></tr>
+</table>
+<div class="sub">■ 회고</div>
+<table>
+<tr><th style="width:50%">잘 된 점</th><th>아쉬운 점</th></tr>
+<tr><td>· 수업 틀을 그대로 두고 사실만 바꿔 하루 만에 섰다<br>· "채팅으로 먼저 → 담당자로 정리" 방식이 실제로 빨랐다<br>· 제품(제작)·상품(소싱)을 한 부서에서 다른 공식·다른 검사로 굴리는 구조가 회사 현실(스피드 회사의 Q·C 보강)과 맞았다<br>· 시장조사가 판가 상한을 정하고 원가가 그 안에서 보는 타깃 코스팅이 흐름으로 고정됐다</td><td>· 자료가 가상 — Playwright 실검색·ERP 읽기는 실무 전환 1순위<br>· 마케터(콘텐츠·광고) 담당은 지식 아카이브가 없어 보류<br>· 예약 실행은 PC가 켜져 있어야 함 — 24시간 컴퓨터 필요<br>· 에이전트 실제 실행 스크린샷은 발표 전 1회 더 돌려야 함</td></tr>
+</table>
+<div class="pg">5 / 5</div>
+</div>
+</body></html>
