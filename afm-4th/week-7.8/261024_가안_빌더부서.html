@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>빌더 부서 가안</title>
+<style>
+body{margin:0;background:#9a9a9a;font-family:"맑은 고딕","Malgun Gothic",sans-serif;color:#111}
+.slide{width:1280px;height:720px;margin:24px auto;background:#fff;box-sizing:border-box;padding:34px 48px;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+h1{font-size:28px;margin:0 0 4px;border-bottom:3px solid #333;padding-bottom:8px}
+.sub{font-size:17px;font-weight:bold;margin:16px 0 8px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{background:#d9d9d9;border:1px solid #777;padding:7px 8px;text-align:center}
+td{border:1px solid #777;padding:7px 8px;vertical-align:top;line-height:1.45}
+td.c{text-align:center;font-weight:bold}
+.note{font-size:13px;color:#444;margin-top:10px;line-height:1.6}
+.pg{position:absolute;right:30px;bottom:16px;font-size:12px;color:#666}
+.box{border:2px solid #333;padding:8px 10px;text-align:center;font-weight:bold;display:inline-block;min-width:170px;background:#f2f2f2}
+.org{text-align:center;margin:10px 0 6px}
+.red{color:#c00;font-weight:bold}
+</style></head><body>
+
+<div class="slide">
+<h1>① 강사 숙제 — Final · Agent Team 요구사항</h1>
+<div class="sub">■ v1 = 화면이 아니라 "세 장면"</div>
+<table>
+<tr><th style="width:20%">장면</th><th style="width:45%">해야 할 것</th><th>제출 증거</th></tr>
+<tr><td class="c">① 자동 위임</td><td>담당자 3명 (.claude/agents/)<br>description에 트리거 단어 + "반드시(MUST)"</td><td>이름 안 부르고 위임된 화면 3장<br>실제 결과물 3개</td></tr>
+<tr><td class="c">② 기억</td><td>CLAUDE.md 첫 줄 "MEMORY.md 먼저 읽기"<br>담당자별 MEMORY · 다음 할 일에 날짜</td><td>/clear 후 규칙이 설명 없이 반영된 화면</td></tr>
+<tr><td class="c">③ 예약 실행</td><td>담당자 1명 예약 실행 1회 이상<br>멈출 장치 = 한도 · 중단 조건 · 로그</td><td>실행 시각이 찍힌 로그</td></tr>
+<tr><td class="c">공통</td><td>폴더 구조 · 담당 파일 3 · MEMORY · 회고 한 단락</td><td>GitHub push → 강의실 카드 URL 등록</td></tr>
+</table>
+<div class="note">※ 회사 실제 자료 사용 시 상호 · 사업자번호 · 금액은 가상값으로 바꿔 제출<br>※ 배점: 기본 10 · 자동 위임 5 · 기억 5 · 예약 실행 5 = 25pt</div>
+<div class="pg">1 / 4</div>
+</div>
+
+<div class="slide">
+<h1>② 가안 — 메이튼 빌더 부서 (메인 1 + 담당 3)</h1>
+<div class="org">
+<div class="box">팀장님 (판정)</div><br>│<br>
+<div class="box">비서실 (메인 · AGENTS.md)<br><span style="font-weight:normal;font-size:13px">라우팅 · 아침 브리핑 · 3줄 요약</span></div><br>
+┌──────────────┼──────────────┐<br>
+<div class="box">원가담당 · C</div>&nbsp;&nbsp;&nbsp;
+<div class="box">입고일정담당 · D ⏰</div>&nbsp;&nbsp;&nbsp;
+<div class="box">품질인증담당 · Q</div>
+</div>
+<div class="sub">■ 판단축: 메이튼 = 압도적 스피드(D) · Q·C 약함 → "D를 지키며 Q·C를 올리는가"</div>
+<table>
+<tr><th style="width:22%">선정 기준 (6주차)</th><th>적용</th></tr>
+<tr><td class="c">반복된다</td><td>일지 10/1~10/23에 매주 나온 일만 선택</td></tr>
+<tr><td class="c">규칙이 있다</td><td>대표 지시 · 팀장회의 결정을 업무규칙.md에 글로 적음</td></tr>
+<tr><td class="c">결과 형식이 정해짐</td><td>원가검토표 · 입고점검표 · 검수보고서 서식 3종</td></tr>
+</table>
+<div class="note">※ 마케터 담당은 제외 (빌더만 우선) · ⏰ = 예약 실행 담당</div>
+<div class="pg">2 / 4</div>
+</div>
+
+<div class="slide">
+<h1>③ 담당자 3명 — 일지 근거와 산출물</h1>
+<div class="sub">■ 실제 반복 업무 → 담당자</div>
+<table>
+<tr><th style="width:15%">담당</th><th style="width:37%">일지 근거 (실제 반복)</th><th style="width:33%">산출물</th><th>안 하는 일</th></tr>
+<tr><td class="c">원가담당<br>(C)</td><td>위안 단가·금형비 견적 → 대표 "금형비가 좀 있네요"(10/6)<br>판가 기반 원가 지시(대표 발언)</td><td>경쟁가 → 판가 → 허용원가 → 견적 3곳 비교표 + 옵션 2~3개</td><td>단가 회신 · 발주</td></tr>
+<tr><td class="c">입고일정담당<br>(D) ⏰</td><td>대표 핵심 = ETA 보고<br>콘텐츠 "입고 1주 전 통보" 요청<br>런칭 vs 입고 역전(10/6 필랑트)</td><td>주간 입고점검표: 금주·전주 ETA 비교 · 지연 · 7일 내 통보 대상 · 업체 질의 초안</td><td>ERP 일정 수정 · 업체 독촉 발송</td></tr>
+<tr><td class="c">품질인증담당<br>(Q)</td><td>골든샘플 피팅 개발팀 주관(10/6 결정)<br>샘플검수 원시트 · 테슬라 KC 리스크 · VOCs</td><td>측정 3개 판정 후보 + 판매채널별 인증 체크 + 수정 지시 초안</td><td>합격 확정 · 시험 신청</td></tr>
+</table>
+<div class="note">※ 2차 후보 (이번 제외): 구매요청서 초안 · 패키지 칼선 요청 · 위챗 To-do 정리</div>
+<div class="pg">3 / 4</div>
+</div>
+
+<div class="slide">
+<h1>④ 안전장치 · 공개 범위 · 진행 순서</h1>
+<div class="sub">■ 안전장치 / 공개 범위</div>
+<table>
+<tr><th style="width:22%">구분</th><th>내용</th></tr>
+<tr><td class="c">읽기 전용</td><td>ERP · 관리시트는 읽기만 — 자료/ 폴더의 내려받은 사본만 사용</td></tr>
+<tr><td class="c">사람 몫</td><td>발송 · 상신 · ERP 입력 · 합격 확정 = 팀장님</td></tr>
+<tr><td class="c">숫자</td><td>계산 스크립트 결과에서만 (암산·추정 금지)</td></tr>
+<tr><td class="c">예약 멈춤</td><td>이번 주 자료 없으면 지어내지 않고 멈춤 + 로그 · 최대 턴·시간 한도</td></tr>
+<tr><td class="c">공개 제출본</td><td>전부 가상값 (MT액세서리 · A101 · SUV-A) — <span class="red">현대·기아·SGS·NX5 실제 건 미포함</span></td></tr>
+</table>
+<div class="sub">■ 진행 순서</div>
+<table>
+<tr><th>완료</th><th>남음</th></tr>
+<tr><td>뼈대 5종 · 가상 자료 · 받은요청 3 · 서식 3</td><td>담당 3 + MEMORY → 계산 스크립트 → 위임 테스트 3 → 예약 실행 1회 → README·회고 → git 설치·커밋 → <b>push 전 확인</b></td></tr>
+</table>
+<div class="pg">4 / 4</div>
+</div>
+
+</body></html>

@@ -1,0 +1,17 @@
+{
+  "cny_krw": 195,
+  "tariff": 0.08,
+  "freight_per_unit": 450,
+  "pack_per_unit": 600,
+  "vat": 0.10,
+  "target_cost_ratio": 0.30,
+  "base_leadtime_days": 35,
+  "first_order_qty_product": 1000,
+  "first_order_qty_goods": 500,
+  "delay_days": 3,
+  "notify_days": 7,
+  "aql_sample": 20,
+  "aql_critical": 0,
+  "aql_major": 1,
+  "aql_minor": 2
+}

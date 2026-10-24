@@ -32,6 +32,7 @@ npm-debug.log*
 
 # ── 로컬 설정 / 비밀값 ───────────────────────
 .claude/settings.local.json
+.claude/agent-memory-local/
 .env
 .env.local
 
@@ -46,3 +47,11 @@ afm-4th/week-2/quest/00_inbox/*.pdf
 # quest5 생성 이미지 원본은 제외 (showcase/ 예시만 커밋)
 afm-4th/week-3/quest/05.my-midjourney/outputs/
 afm-4th/week-3/quest/05.my-midjourney/refs/
+
+# week-7.8 비공개 (키·카톡 원문·오디오·강의 전사·예약 잠금)
+afm-4th/week-7.8/.env
+afm-4th/week-7.8/KakaoTalk_*.txt
+afm-4th/week-7.8/audio/
+afm-4th/week-7.8/*-전사.txt
+afm-4th/week-7.8/final-agent-team/로그/.ran_*
+afm-4th/week-7.8/final-agent-team/로그/*.out.txt
