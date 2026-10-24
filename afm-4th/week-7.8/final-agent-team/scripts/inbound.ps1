@@ -14,10 +14,11 @@ foreach($r in $T){
   $notify= ($dd -ne $null -and $dd -ge 0 -and $dd -le $F.notify_days)
   $rows+=[pscustomobject]@{j=$j;code=$r.code;item=$r.item;sup=$r.supplier;pe=$pe;eta=$r.eta;d=$d;dd=$dd;notify=$notify;shoot=$r.content_shoot;status=$r.status;pair=$r.pair}
 }
+$nRed=@($rows|?{$_.j -like '🔴*'}).Count; $nYel=@($rows|?{$_.j -like '🟡*'}).Count; $nGrn=@($rows|?{$_.j -like '🟢*'}).Count; $nWht=@($rows|?{$_.j -like '⚪*'}).Count; $nNot=@($rows|?{$_.notify}).Count
 "기준일 $Base · 이번 주 $This ($($T.Count)건) · 전주 $Prev"
 "`n## ① 요약"
 "| 전체 | 🔴지연 | 🟡변동 | 🟢정상 | ⚪확인 필요 | 통보 대상 |"; "|---|---|---|---|---|---|"
-"| $($rows.Count) | $(($rows|?{$_.j -like '🔴*'}).Count) | $(($rows|?{$_.j -like '🟡*'}).Count) | $(($rows|?{$_.j -like '🟢*'}).Count) | $(($rows|?{$_.j -like '⚪*'}).Count) | $(($rows|?{$_.notify}).Count) |"
+"| $($rows.Count) | $nRed | $nYel | $nGrn | $nWht | $nNot |"
 "`n## ② 통보 대상 (0~$($F.notify_days)일 · 촬영 Y 먼저)"
 "| 코드 | 품목 | ETA | D-일 | 촬영 | 상태 |"; "|---|---|---|---|---|---|"
 $rows|?{$_.notify}|Sort-Object @{e={$_.shoot -ne 'Y'}},dd|%{"| $($_.code) | $($_.item) | $($_.eta) | D-$($_.dd) | $($_.shoot) | $($_.status) |"}
